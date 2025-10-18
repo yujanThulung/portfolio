@@ -3,8 +3,20 @@
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+
+// Reusable shake/hover animation variants
+const hoverShakeVariants: Variants = {
+  rest: {
+    y: [0, -10, 10, -5, 5, 0],
+    transition: { duration: 0.6, ease: [0.42, 0, 0.58, 1] },
+  },
+  hover: {
+    y: -200,
+    transition: { duration: 0.4, ease: [0.42, 0, 0.58, 1] },
+  },
+};
 
 export default function HeroSection() {
   const { theme } = useTheme();
@@ -24,53 +36,49 @@ export default function HeroSection() {
     ? "filter brightness-75 contrast-115"
     : "filter brightness-100 contrast-105";
 
-
-  
-const shakeX = {
-    x: [0, -10, 10, -5, 5, 0],
-    transition: { duration: 0.6, ease: [0.42, 0, 0.58, 1] },
-  };
-
-  const shakeY = {
-    y: [0, -10, 10, -5, 5, 0],
-    transition: { duration: 0.6, ease: [0.42, 0, 0.58, 1] },
-  };
-
   return (
     <section
       className={`relative w-full min-h-screen flex flex-col justify-center items-center px-6 md:px-16 overflow-hidden transition-colors duration-500 ${bgColor}`}
     >
       {/* --- Top Heading Section --- */}
-      <motion.div className="relative z-10 text-center font-urbanist font-semibold mt-10"
+      <motion.div
+        className="relative z-10 text-center font-urbanist font-semibold mt-10"
         animate={{
-          y: isHovered ? 350 : 0, 
+          y: isHovered ? 350 : 0,
           opacity: isHovered ? 0 : 1,
         }}
-        transition={{ duration: 0.4, ease: "easeInOut" }}>
+        transition={{ duration: 0.4, ease: "easeInOut" }}
+      >
         <div
-          className={`inline-block px-3 py-0 border rounded-full text-sm font-medium mb-3 ${isDark
-              ? "border-gray-600 text-gray-200"
-              : "border-gray-300 text-gray-800"
-            }`}
+          className={`inline-block px-3 py-0 border rounded-full text-sm font-medium mb-3 ${
+            isDark ? "border-gray-600 text-gray-200" : "border-gray-300 text-gray-800"
+          }`}
         >
           Hello!
         </div>
 
         {/* Decorative waves */}
-        <span className="absolute top-[-20px] right-54">
-          <img src={"/icons/wave1.png"} alt="wave1" />
-        </span>
-        <span className="absolute left-[-48px] top-44">
-          <img src={"/icons/wave2.png"} alt="wave2" />
-        </span>
-
-        <h1
-          className={`text-5xl md:text-7xl leading-tight tracking-wider ${textColor}`}
+        <motion.span
+          className="absolute top-[-20px] right-54"
+          variants={hoverShakeVariants}
+          initial="rest"
+          animate={isHovered ? "hover" : "rest"}
         >
+          <img src={"/icons/wave1.png"} alt="wave1" />
+        </motion.span>
+
+        <motion.span
+          className="absolute left-[-48px] top-44"
+          variants={hoverShakeVariants}
+          initial="rest"
+          animate={isHovered ? "hover" : "rest"}
+        >
+          <img src={"/icons/wave2.png"} alt="wave2" />
+        </motion.span>
+
+        <h1 className={`text-5xl md:text-7xl leading-tight tracking-wider ${textColor}`}>
           I&apos;m{" "}
-          <span className={`${isDark ? "text-orange-300" : "text-orange-400"}`}>
-            YUJAN
-          </span>
+          <span className={`${isDark ? "text-orange-300" : "text-orange-400"}`}>YUJAN</span>
           , <br />
           Web Developer
         </h1>
@@ -81,11 +89,9 @@ const shakeX = {
         {/* --- Left Quote (animated) --- */}
         <motion.div
           className="flex-1 text-center md:text-left space-y-4 mb-[20rem] md:mb-[30rem]"
-          animate={
-            isHovered
-              ? { y: -200, transition: { duration: 0.4, ease: "easeInOut" } }
-              : shakeX
-          }
+          variants={hoverShakeVariants}
+          initial="rest"
+          animate={isHovered ? "hover" : "rest"}
         >
           <Image
             src={quoteIcon}
@@ -95,8 +101,7 @@ const shakeX = {
             className="mx-auto md:mx-0"
           />
           <p className={`max-w-sm mx-auto md:mx-0 italic ${subTextColor}`}>
-            “Yujan’s exceptional web design ensures our project’s success.
-            Highly recommended!”
+            “Yujan’s exceptional web design ensures our project’s success. Highly recommended!”
           </p>
         </motion.div>
 
@@ -121,11 +126,7 @@ const shakeX = {
             }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
           >
-            <img
-              src={"/images/bgVector.png"}
-              alt="bgVector"
-              className="w-[55rem] md:w-[75rem]"
-            />
+            <img src={"/images/bgVector.png"} alt="bgVector" className="w-[55rem] md:w-[75rem]" />
           </motion.span>
 
           {/* Main Image */}
@@ -138,17 +139,17 @@ const shakeX = {
             className={`absolute -translate-y-80 z-10 object-cover scale-110 transition-transform duration-500 ${imageFilter}`}
           />
 
-
           {/* Buttons */}
           <div className="flex gap-4 mt-8 z-20">
             <button className="flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-orange-600 transition">
               Portfolio <ArrowRight className="w-4 h-4" />
             </button>
             <button
-              className={`border px-6 py-3 rounded-full text-sm font-medium transition ${isDark
+              className={`border px-6 py-3 rounded-full text-sm font-medium transition ${
+                isDark
                   ? "border-gray-600 text-gray-100 hover:bg-neutral-800"
                   : "border-gray-300 text-gray-900 hover:bg-gray-100"
-                }`}
+              }`}
             >
               Hire me
             </button>
@@ -158,24 +159,20 @@ const shakeX = {
         {/* --- Right Experience (animated) --- */}
         <motion.div
           className="flex-1 text-center md:text-left space-y-2 mb-[20rem] md:mb-[30rem]"
-          animate={
-            isHovered
-              ? { y: -200, transition: { duration: 0.4, ease: [0.42, 0, 0.58, 1] } }
-              : shakeY
-          }
-
+          variants={hoverShakeVariants}
+          initial="rest"
+          animate={isHovered ? "hover" : "rest"}
         >
           <div
-            className={`flex justify-center md:justify-start gap-1 ${isDark ? "text-orange-300" : "text-orange-400"
-              } text-xl`}
+            className={`flex justify-center md:justify-start gap-1 ${
+              isDark ? "text-orange-300" : "text-orange-400"
+            } text-xl`}
           >
             {Array.from({ length: 5 }).map((_, i) => (
               <span key={i}>★</span>
             ))}
           </div>
-          <h2 className={`text-2xl md:text-3xl font-semibold ${textColor}`}>
-            10 Years
-          </h2>
+          <h2 className={`text-2xl md:text-3xl font-semibold ${textColor}`}>10 Years</h2>
           <p className={`text-sm ${subTextColor}`}>Experience</p>
         </motion.div>
       </div>
