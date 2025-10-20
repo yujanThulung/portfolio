@@ -1,32 +1,44 @@
 "use client";
-import React from "react";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
 
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "ghost" | "outline";
-  href?: string;
-};
+import { useTheme } from "next-themes";
+import clsx from "clsx";
+import { ReactNode } from "react";
 
-export default function Button({ variant = "primary", href, className, children, ...rest }: ButtonProps) {
-  const base = "inline-flex items-center justify-center rounded-2xl px-4 py-2 text-sm font-medium transition-shadow focus:outline-none focus:ring-2 focus:ring-offset-2";
-  const variants = {
-    primary: "bg-sky-600 text-white hover:shadow-lg focus:ring-sky-500",
-    ghost: "bg-transparent text-slate-900 hover:bg-slate-100",
-    outline: "border border-slate-200 text-slate-900 hover:bg-slate-50"
-  };
+interface ButtonProps {
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
+  children?: ReactNode;
+  variant?: "text" | "solid";
+}
 
-  if (href) {
-    return (
-      <Link href={href} className={cn(base, variants[variant], className)} {...(rest as any)}>
-        {children}
-      </Link>
-    );
-  }
+export default function Button({
+  leftIcon,
+  rightIcon,
+  children,
+  variant = "solid",
+}: ButtonProps) {
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+
+  const baseStyle =
+    "flex items-center justify-center gap-2 px-4 py-2 rounded-full w-fit font-medium transition-all duration-200";
+
+  const solidStyle = clsx(
+    baseStyle,
+    "border border-orange-600 bg-orange-500 text-white hover:bg-orange-600"
+  );
+
+  const textStyle = clsx(
+    baseStyle,
+    isDark ? "text-gray-100" : "text-gray-900",
+    "hover:text-orange-500"
+  );
 
   return (
-    <button className={cn(base, variants[variant], className)} {...rest}>
-      {children}
+    <button className={variant === "solid" ? solidStyle : textStyle}>
+      {leftIcon && <span className="flex items-center">{leftIcon}</span>}
+      <span>{children}</span>
+      {rightIcon && <span className="flex items-center">{rightIcon}</span>}
     </button>
   );
 }
