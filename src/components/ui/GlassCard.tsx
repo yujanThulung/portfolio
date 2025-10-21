@@ -3,7 +3,42 @@
 import React from "react";
 import Image from "next/image";
 
-export default function GlassCard() {
+interface GlassCardProps {
+  title: string;
+  images: { src: string; alt?: string }[];
+}
+
+export default function GlassCard({ title, images }: GlassCardProps) {
+  const layerStyles = [
+  {
+    top: "0px",          // slightly aligned to the top edge
+    scale: "0.90",
+    opacity: "0.8",
+    zIndex: 0,
+    bg: "rgba(255,255,255,0.15)",
+    padding: "8px",
+    shadow: "shadow-md",
+  },
+  {
+    top: "25px",         // spaced evenly between first and last
+    scale: "0.95",
+    opacity: "1",
+    zIndex: 5,
+    bg: "#d1d5db",
+    padding: "8px",
+    shadow: "shadow-md",
+  },
+  {
+    top: "50px",         // bottom-most layer (main image)
+    scale: "1",
+    opacity: "1",
+    zIndex: 10,
+    bg: "transparent",
+    padding: "0px",
+    shadow: "shadow-lg",
+  },
+];
+
   return (
     <div
       className="w-[250px] rounded-3xl
@@ -33,48 +68,41 @@ export default function GlassCard() {
         maskRepeat: "no-repeat",
       }}
     >
-      {/* Optional glow layer */}
+      {/* Optional glow effect */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.2),transparent_60%)] -z-10" />
 
-      {/* Card content */}
+      {/* Card header */}
       <div className="flex flex-col gap-3">
-        <h2 className="text-xl font-semibold p-2 pt-4">Web Design</h2>
+        <h2 className="text-xl font-semibold p-2 pt-4">{title}</h2>
         <div className="h-[1px] w-full bg-white/30"></div>
 
-        {/* Overlapping image stack */}
+        {/* Image Stack */}
         <div className="relative mt-4 w-full h-[170px]">
-          {/* 3rd image (topmost, farthest up, lowest opacity) */}
-          <div className="absolute top-[-2] left-0 w-full bg-white/15 p-2 rounded-3xl backdrop-blur-sm shadow-md scale-[0.90] z-0">
-            <Image
-              src="/images/yujan.png"
-              alt="Design 3"
-              width={250}
-              height={120}
-              className="w-full h-[120px] rounded-3xl object-cover"
-            />
-          </div>
-
-          {/* 2nd image (middle, slightly lower) */}
-          <div className="absolute top-4 left-0 w-full rounded-3xl bg-gray-300 p-2 backdrop-blur-sm shadow-md opacity-100 scale-[0.95] z-5">
-            <Image
-              src="/images/yujan.png"
-              alt="Design 2"
-              width={250}
-              height={120}
-              className="w-full h-[120px]  object-cover"
-            />
-          </div>
-
-          {/* 1st image (bottom, fully visible, slightly lower than others) */}
-          <div className="absolute top-8 left-0 w-full bg-red rounded-3xl backdrop-blur-sm shadow-lg z-10">
-            <Image
-              src="/images/service/landing1.jpg"
-              alt="Design 1"
-              width={250}
-              height={120}
-              className="w-full h-full rounded-3xl object-cover"
-            />
-          </div>
+          {images.slice(0, 3).map((img, i) => {
+            const style = layerStyles[i] ?? layerStyles[layerStyles.length - 1];
+            return (
+              <div
+                key={i}
+                className={`absolute w-full rounded-3xl backdrop-blur-sm ${style.shadow}`}
+                style={{
+                  top: style.top,
+                  transform: `scale(${style.scale})`,
+                  zIndex: style.zIndex,
+                  opacity: style.opacity,
+                  backgroundColor: style.bg,
+                  padding: style.padding,
+                }}
+              >
+                <Image
+                  src={img.src}
+                  alt={img.alt || `image-${i}`}
+                  width={250}
+                  height={120}
+                  className="w-full h-[120px] rounded-3xl object-cover"
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
