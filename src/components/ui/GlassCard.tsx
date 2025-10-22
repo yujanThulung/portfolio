@@ -68,7 +68,7 @@ export default function GlassCard({ title, images }: GlassCardProps) {
 
         {/* Header */}
         <div>
-          <h2 className="p-6  pb-0 text-xl font-semibold text-white tracking-wide mb-3">{title}</h2>
+          <h2 className="p-6 font-lufga pb-0 text-xl font-semibold text-white tracking-wide mb-3">{title}</h2>
           <div className="h-[1px] bg-white/30 mb-4"></div>
         </div>
 

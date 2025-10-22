@@ -67,13 +67,15 @@ export default function ServicesSection() {
       }}>
       <div className="container mx-auto max-w-7xl">
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-6 mb-16">
+        <div className="flex flex-col md:flex-row justify-center md:justify-start items-center md:items-center gap-6 mb-16">
           <div className="flex-shrink-0">
             <HighlightText firstText="My" orangeText=" Services" size="4xl" />
           </div>
-          <p className="text-gray-300 text-lg md: md:max-w-xl leading-relaxed font-light">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis lacus nunc,
-            posuere in justo vulputate, bibendum sodales.
+          <p className="text-gray-300 font-light text-sm md:max-w-xl leading-relaxed text-center md:text-center">
+            I specialize in creating engaging digital experiences that bring ideas to life.
+            From UI/UX design to responsive web development, landing pages,
+            and brand identity, I deliver creative solutions that help businesses and projects
+            stand out online.
           </p>
         </div>
 
@@ -113,8 +115,8 @@ export default function ServicesSection() {
                 key={index}
                 onClick={() => goToSlide(index)}
                 className={`transition-all duration-300 ${index === activeIndex
-                    ? "w-8 h-3 bg-orange-500 rounded-full"
-                    : "w-3 h-3 bg-white/30 rounded-full hover:bg-white/50"
+                  ? "w-8 h-3 bg-orange-500 rounded-full"
+                  : "w-3 h-3 bg-white/30 rounded-full hover:bg-white/50"
                   }`}
               />
             ))}
