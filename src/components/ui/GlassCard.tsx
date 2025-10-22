@@ -12,42 +12,41 @@ interface GlassCardProps {
 export default function GlassCard({ title, images }: GlassCardProps) {
   const layerStyles = [
     {
-      top: "0px",
-      scale: "0.90",
-      opacity: "0.8",
-      zIndex: 0,
-      bg: "rgba(255,255,255,0.15)",
-      padding: "8px",
-      shadow: "shadow-md",
+      top: "8px",
+      scale: "0.9",
+      opacity: "1",
+      zIndex: 1,
+      bg: "rgba(255,255,255,0.12)",
     },
     {
-      top: "25px",
+      top: "28px",
       scale: "0.95",
       opacity: "1",
       zIndex: 5,
-      bg: "#d1d5db",
-      padding: "8px",
-      shadow: "shadow-md",
+      bg: "rgba(255,255,255,0.18)",
     },
     {
-      top: "50px",
+      top: "48px",
       scale: "1",
       opacity: "1",
       zIndex: 10,
-      bg: "transparent",
-      padding: "0px",
-      shadow: "shadow-lg",
+      bg: "rgba(255,255,255,0.25)",
     },
   ];
 
   return (
-    <div className="relative w-[250px]">
-      {/* Main Card Container with Mask */}
+    <div className="relative w-[320px] h-[340px] group">
+      {/* Main Card */}
       <div
-        className="w-full rounded-3xl flex flex-col justify-start text-white relative overflow-hidden isolate font-lufga text-3xl font-medium bg-white/10 border border-white/40 backdrop-blur-xl shadow-[0_8px_20px_rgba(0,0,0,0.25)]"
+        className="relative w-full h-full rounded-3xl overflow-hidden 
+           border border-white/30 backdrop-blur-xl bg-transparent
+          shadow-[0_8px_25px_rgba(0,0,0,0.25)]
+          flex flex-col justify-between transition-all duration-300
+          hover:scale-[1.02] hover:shadow-[0_12px_35px_rgba(0,0,0,0.35)]
+          pt-3"
         style={{
-          ["--r" as any]: "20px",
-          ["--s" as any]: "50px",
+          ["--r" as any]: "24px",
+          ["--s" as any]: "45px",
           ["--x" as any]: "20px",
           ["--y" as any]: "20px",
           ["--_m" as any]: "/calc(2*var(--r)) calc(2*var(--r)) radial-gradient(#000 70%, #0000 72%)",
@@ -64,54 +63,54 @@ export default function GlassCard({ title, images }: GlassCardProps) {
           maskRepeat: "no-repeat",
         }}
       >
-        {/* Optional glow effect */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.2),transparent_60%)] -z-10" />
+        {/* Subtle glow effect */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,255,255,0.2),transparent_60%)] -z-10" />
 
-        {/* Card header */}
-        <div className="flex flex-col gap-3">
-          <h2 className="text-xl font-semibold p-2 pt-4">{title}</h2>
-          <div className="h-[1px] w-full bg-white/30"></div>
+        {/* Header */}
+        <div>
+          <h2 className="p-6  pb-0 text-xl font-semibold text-white tracking-wide mb-3">{title}</h2>
+          <div className="h-[1px] bg-white/30 mb-4"></div>
+        </div>
 
-          {/* Image Stack */}
-          <div className="relative mt-4 w-full h-[170px]">
-            {images.slice(0, 3).map((img, i) => {
-              const style = layerStyles[i] ?? layerStyles[layerStyles.length - 1];
-              return (
-                <div
-                  key={i}
-                  className={`absolute w-full rounded-3xl backdrop-blur-sm ${style.shadow}`}
-                  style={{
-                    top: style.top,
-                    transform: `scale(${style.scale})`,
-                    zIndex: style.zIndex,
-                    opacity: style.opacity,
-                    backgroundColor: style.bg,
-                    padding: style.padding,
-                  }}
-                >
-                  <Image
-                    src={img.src}
-                    alt={img.alt || `image-${i}`}
-                    width={250}
-                    height={120}
-                    className="w-full h-[120px] rounded-3xl object-cover"
-                  />
-                </div>
-              );
-            })}
-          </div>
+        {/* Image stack */}
+        <div className="relative w-full h-[180px] mb-4">
+          {images.slice(0, 3).map((img, i) => {
+            const style = layerStyles[i] ?? layerStyles[layerStyles.length - 1];
+            return (
+              <div
+                key={i}
+                className="absolute w-full rounded-3xl backdrop-blur-sm"
+                style={{
+                  top: style.top,
+                  transform: `scale(${style.scale})`,
+                  zIndex: style.zIndex,
+                  opacity: style.opacity,
+                  backgroundColor: style.bg,
+                }}
+              >
+                <Image
+                  src={img.src}
+                  alt={img.alt || `image-${i}`}
+                  width={280}
+                  height={150}
+                  className="w-full h-[150px] rounded-3xl object-cover"
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      {/* Button positioned absolutely relative to the parent container */}
+      {/* Floating button */}
       <button
-        className="absolute bottom-0 right-0 w-20 h-20 rounded-full
-                   bg-[#1D2939] 
-                   backdrop-blur-md flex items-center justify-center
-                   shadow-lg hover:bg-[#324358] transition-all duration-300
-                   hover:scale-110 z-50"
+        className="absolute bottom-0 right-0 w-18 h-18 rounded-full
+          bg-[#1D2939]/80 backdrop-blur-lg border border-white/20
+          flex items-center justify-center
+          shadow-lg transition-all duration-300 
+          group-hover:scale-110 group-hover:bg-[#1D2939]
+          hover:shadow-[0_0_20px_rgba(255,255,255,0.2)]"
       >
-        <ArrowUpRight className="text-white w-10 h-10 " />
+        <ArrowUpRight className="text-white w-7 h-7" />
       </button>
     </div>
   );

@@ -14,8 +14,9 @@ export default function Navbar() {
   const [hovered, setHovered] = useState(false);
 
   return (
-    <nav className="font-sans font-light  fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-[90%] md:w-[70%] bg-white dark:bg-neutral-900 text-gray-900 dark:text-white rounded-full shadow-lg transition-colors duration-300 ">
-      <div className="flex items-center justify-between px-5 py-2">
+    <nav className="font-sans font-light fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-[90%] md:w-[80%] lg:w-[75%] bg-white dark:bg-neutral-900 text-gray-900 dark:text-white rounded-full shadow-lg transition-colors duration-300">
+      {/* Add responsive padding wrapper */}
+      <div className="px-6 sm:px-10 py-2 flex items-center justify-between">
         {/* Mobile Menu Button */}
         <button
           className="md:hidden text-gray-900 dark:text-white"

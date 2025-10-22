@@ -140,7 +140,7 @@ export default function HeroSection() {
           />
 
           {/* Buttons */}
-          <div className="flex gap-4 mt-8 z-20">
+          {/* <div className="flex gap-4 mt-8 z-20">
             <button className="flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-orange-600 transition">
               Portfolio <ArrowRight className="w-4 h-4" />
             </button>
@@ -153,7 +153,7 @@ export default function HeroSection() {
             >
               Hire me
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* --- Right Experience (animated) --- */}
