@@ -28,7 +28,7 @@ export default function HighlightText({
     <h2 className={clsx("font-semibold font-urbanist", sizeClass)}>
       <span className="text-gray-800">{firstText}</span>
       {orangeText && <span className="text-orange-500 font-semibold">{orangeText}</span>}
-      {lastText && <span className="text ">{orangeText}</span>}=
+      {lastText && <span className="text ">{orangeText}</span>}
     </h2>
   );
 }

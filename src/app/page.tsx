@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ArrowRight, Mail } from "lucide-react";
 import HighlightText from "@/components/ui/HighlightText";
 import GlassCard from "@/components/ui/GlassCard";
+import ServicesSection from "@/components/servicesSection/ServicesSection";
 
 
 const imageList = [
@@ -16,13 +17,8 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <Button leftIcon={<ArrowRight />} rightIcon={<Mail />} variant="solid">
-        Solid Button
-      </Button>
-      <HighlightText firstText="Why" orangeText="Hire me?" size="5xl" />
-      <div className="bg-amber-300 p-6">
-      <GlassCard title="Web Design" images={imageList} />
-      </div>
+      <ServicesSection/>
+      
 
     </>
   );
