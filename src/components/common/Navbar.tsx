@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
@@ -10,14 +10,45 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname()?.replace(/\/$/, "") || "/";
   const [hovered, setHovered] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname()?.replace(/\/$/, "") || "/";
+
+  // detect scroll
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <nav className="font-sans font-light fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-[90%] md:w-[80%] lg:w-[75%] bg-white dark:bg-neutral-900 text-gray-900 dark:text-white rounded-full shadow-lg transition-colors duration-300">
-      {/* Add responsive padding wrapper */}
-      <div className="px-6 sm:px-10 py-2 flex items-center justify-between">
-        {/* Mobile Menu Button */}
+    <motion.nav
+      initial={false}
+      animate={{
+        top: isScrolled ? 24 : 0,
+        width: isScrolled ? "75%" : "100%",
+        borderRadius: isScrolled ? 9999 : 0, // smooth radius change
+        left: isScrolled ? "50%" : 0,
+        x: isScrolled ? "-50%" : 0,
+      }}
+      transition={{
+        duration: 0.5,
+        ease: [0.4, 0, 0.2, 1],
+      }}
+      className={`fixed font-sans font-light z-50 shadow-lg 
+        bg-white dark:bg-neutral-900 text-gray-900 dark:text-white
+        overflow-hidden`} // prevent flicker during radius change
+      style={{ transformOrigin: "top center" }}
+    >
+      {/* Inner Wrapper with Dynamic Padding */}
+      <div
+        className={`flex items-center justify-between transition-all duration-500 ${
+          isScrolled
+            ? "px-6 sm:px-10 py-2"
+            : "px-10 sm:px-20 lg:px-32 py-6"
+        }`}
+      >
+        {/* Mobile Toggle */}
         <button
           className="md:hidden text-gray-900 dark:text-white"
           onClick={() => setIsOpen(!isOpen)}
@@ -26,7 +57,7 @@ export default function Navbar() {
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
-        {/* Desktop Menu */}
+        {/* Desktop Nav */}
         <div className="hidden md:flex items-center justify-between w-full">
           {/* Left Links */}
           <div className="flex items-center space-x-4">
@@ -54,14 +85,12 @@ export default function Navbar() {
             onMouseEnter={() => setHovered(true)}
             onMouseLeave={() => setHovered(false)}
           >
-            {/* Circle with initials */}
             <div className="bg-orange-500 text-black font-light rounded-full px-3 py-2 text-sm">
               YR
             </div>
 
-            {/* Animated text */}
             <motion.div
-              className="font-light tracking-wide text-gray-900 dark:text-white"
+              className="font-light tracking-wide text-gray-900 dark:text-white overflow-hidden"
               initial={{ width: "3rem" }}
               animate={{ width: hovered ? "10rem" : "3rem" }}
               transition={{ type: "spring", stiffness: 200, damping: 20 }}
@@ -142,6 +171,6 @@ export default function Navbar() {
           <ThemeSwitch />
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 }

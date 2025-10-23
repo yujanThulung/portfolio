@@ -1,7 +1,7 @@
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { lufga } from "@/lib/fonts";
-import Navbar from "@/components/common/Navbar";
+import Navbar from "@/components/common/Navbar"
 
 import { Urbanist as UrbanistCreator } from 'next/font/google';
 
