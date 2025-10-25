@@ -6,6 +6,8 @@ import HighlightText from "@/components/ui/HighlightText";
 import GlassCard from "@/components/ui/GlassCard";
 import ServicesSection from "@/components/servicesSection/ServicesSection";
 import SkillShowcase from "@/components/skillShowcase/SkillShowcase";
+import ExperienceSection from "@/components/experienceSection/ExperienceSection";
+import Footer from "@/footer/Footer";
 
 
 const imageList = [
@@ -119,6 +121,8 @@ export default function Home() {
       <div className="h-[100vh]" />
       <div className="relative z-0">
         <SkillShowcase skills={skills} />
+        <ExperienceSection experiences={sampleExperiences} />
+        <Footer/>
       </div>
     </div>
   );
