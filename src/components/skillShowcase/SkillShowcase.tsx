@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import Marquee from "react-fast-marquee";
 import { motion } from "framer-motion";
 
+import HighlightText from "../ui/HighlightText";
+
 interface Skill {
   name: string;
   logo: string;
@@ -26,10 +28,19 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
   const [mounted, setMounted] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [randomPositions, setRandomPositions] = useState<Position[]>([]);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isCursorInSection, setIsCursorInSection] = useState(false);
 
   useEffect(() => {
     setMounted(true);
     generateRandomPositions();
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [skills.length]);
 
   // Generate non-overlapping random positions
@@ -45,8 +56,8 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
 
       while (!validPosition && attempts < 100) {
         position = {
-          x: (Math.random() - 0.5) * (screenWidth - 300), // Wider spread
-          y: (Math.random() - 0.5) * (screenHeight - 300), // Wider spread
+          x: (Math.random() - 0.5) * (screenWidth - 300),
+          y: (Math.random() - 0.5) * (screenHeight - 300),
         };
 
         // Check if this position overlaps with existing ones
@@ -55,7 +66,7 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
             Math.pow(position.x - existingPos.x, 2) + 
             Math.pow(position.y - existingPos.y, 2)
           );
-          return distance > 150; // Increased minimum distance
+          return distance > 150;
         });
 
         if (validPosition) {
@@ -68,7 +79,7 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
       // If couldn't find non-overlapping position, use a calculated position
       if (!validPosition) {
         const angle = (i / skills.length) * 2 * Math.PI;
-        const radius = 200 + (i % 3) * 50; // Vary the radius
+        const radius = 200 + (i % 3) * 50;
         positions.push({
           x: Math.cos(angle) * radius,
           y: Math.sin(angle) * radius,
@@ -103,89 +114,151 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
   const remainingSkillsNormal = createCircularArrangement(remainingSkills, 160);
 
   return (
-    <section className={`relative w-full min-h-screen py-20 px-6 sm:px-12 lg:px-24 overflow-hidden ${bgColor}`}>
-      {/* Animated Background Grid */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
-      </div>
-
-      {/* Floating Particles */}
+    <section 
+      className={`relative w-full min-h-screen py-20 px-6 sm:px-12 lg:px-24 overflow-hidden ${bgColor}`}
+      onMouseEnter={() => setIsCursorInSection(true)}
+      onMouseLeave={() => setIsCursorInSection(false)}
+    >
+      {/* Cursor-responsive Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
-        {[...Array(15)].map((_, i) => (
+        {/* Animated Grid with enhanced hover effects */}
+        <motion.div 
+          className="absolute inset-0"
+          animate={{
+            opacity: isCursorInSection ? 0.4 : 0.3,
+            scale: isCursorInSection ? 1.05 : 1,
+            x: mousePosition.x * (isCursorInSection ? -0.02 : -0.01),
+            y: mousePosition.y * (isCursorInSection ? -0.02 : -0.01),
+          }}
+          transition={{ 
+            type: "spring", 
+            stiffness: isCursorInSection ? 30 : 50, 
+            damping: 20 
+          }}
+        >
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
+          
+          {/* Animated gradient overlay on hover */}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-orange-400/5 to-purple-500/5"
+            animate={{
+              opacity: isCursorInSection ? 1 : 0,
+            }}
+            transition={{ duration: 0.5 }}
+          />
+        </motion.div>
+
+        {/* Dynamic gradient spotlight that follows cursor */}
+        <motion.div
+          className="absolute w-96 h-96 rounded-full blur-3xl opacity-20"
+          animate={{
+            x: mousePosition.x - 192,
+            y: mousePosition.y - 192,
+            scale: isCursorInSection ? 1.2 : 0.8,
+            opacity: isCursorInSection ? 0.3 : 0.1,
+          }}
+          transition={{ 
+            type: "spring", 
+            stiffness: 100, 
+            damping: 30 
+          }}
+          style={{
+            background: isDark 
+              ? 'radial-gradient(circle, rgba(168,85,247,0.4) 0%, rgba(99,102,241,0.2) 50%, transparent 70%)'
+              : 'radial-gradient(circle, rgba(251,146,60,0.4) 0%, rgba(249,115,22,0.2) 50%, transparent 70%)',
+          }}
+        />
+
+        {/* Enhanced Floating Particles with hover interaction */}
+        {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
             className={`absolute w-1 h-1 rounded-full ${
-              isDark ? 'bg-purple-400/30' : 'bg-orange-400/30'
+              isDark ? 'bg-purple-400/40' : 'bg-orange-400/40'
             }`}
             initial={{
-              x: Math.random() * window.innerWidth,
-              y: Math.random() * window.innerHeight,
+              x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1200),
+              y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 800),
             }}
             animate={{
-              y: [0, -30, 0],
-              opacity: [0.3, 0.8, 0.3],
+              x: mousePosition.x * (isCursorInSection ? 0.03 : 0.02) + (Math.random() * 40 - 20),
+              y: mousePosition.y * (isCursorInSection ? 0.03 : 0.02) + (Math.random() * 40 - 20),
+              opacity: isCursorInSection ? [0.5, 1, 0.5] : [0.3, 0.8, 0.3],
+              scale: isCursorInSection ? 1.5 : 1,
             }}
             transition={{
-              duration: 3 + Math.random() * 2,
+              duration: isCursorInSection ? 2 + Math.random() : 3 + Math.random() * 2,
               repeat: Infinity,
               delay: Math.random() * 2,
             }}
           />
         ))}
+
+        {/* Pulse rings that emanate from cursor */}
+        {isCursorInSection && (
+          <>
+            <motion.div
+              className="absolute w-8 h-8 rounded-full border-2 opacity-0"
+              animate={{
+                x: mousePosition.x - 16,
+                y: mousePosition.y - 16,
+                scale: [1, 3, 1],
+                opacity: [0.5, 0, 0],
+              }}
+              transition={{
+                duration: 2,
+                repeat: Infinity,
+                repeatDelay: 1,
+              }}
+              style={{
+                borderColor: isDark ? 'rgba(168,85,247,0.5)' : 'rgba(251,146,60,0.5)',
+              }}
+            />
+            <motion.div
+              className="absolute w-8 h-8 rounded-full border-2 opacity-0"
+              animate={{
+                x: mousePosition.x - 16,
+                y: mousePosition.y - 16,
+                scale: [1, 4, 1],
+                opacity: [0.3, 0, 0],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                repeatDelay: 2,
+              }}
+              style={{
+                borderColor: isDark ? 'rgba(99,102,241,0.5)' : 'rgba(249,115,22,0.5)',
+              }}
+            />
+          </>
+        )}
+
+        {/* Background particles that react to hover */}
+        <motion.div
+          className="absolute inset-0"
+          animate={{
+            background: isCursorInSection 
+              ? isDark 
+                ? 'radial-gradient(ellipse at center, rgba(168,85,247,0.05) 0%, transparent 50%)'
+                : 'radial-gradient(ellipse at center, rgba(251,146,60,0.05) 0%, transparent 50%)'
+              : 'transparent',
+          }}
+          transition={{ duration: 0.5 }}
+        />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
-        <motion.div
-          className="text-center mb-20"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <motion.div
-            className="inline-flex items-center gap-3 mb-6 px-4 py-2 rounded-full border backdrop-blur-sm"
-            style={{
-              borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-              background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-            }}
-          >
-            <div className={`w-2 h-2 rounded-full bg-gradient-to-r from-orange-400 to-purple-500`} />
-            <span className={`text-sm font-medium ${subTextColor}`}>Technologies</span>
-          </motion.div>
-
-          <motion.h2
-            className={`text-4xl md:text-6xl lg:text-7xl font-bold mb-6 ${textColor}`}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            {title.split(' ').map((word, index) => (
-              <motion.span
-                key={index}
-                className="inline-block mr-4"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-              >
-                {word}
-              </motion.span>
-            ))}
-          </motion.h2>
-
-          <motion.p
-            className={`text-xl md:text-2xl ${subTextColor} max-w-3xl mx-auto leading-relaxed`}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-          >
-            Exploring the digital landscape with cutting-edge tools and frameworks
-          </motion.p>
+        <motion.div className="text-center">
+          <HighlightText firstText="My" orangeText=" Skills" size="4xl"/>
+          <p className={`${subTextColor} mt-4`}>The digital toolbox that powers my creativity and problem-solving.</p>
         </motion.div>
 
         {/* Circular Skill Showcase */}
-        <div className="relative h-96 mb-32 flex items-center justify-center">
+        <div className="relative h-96 mb-28 pt-12 flex items-center justify-center">
           <motion.div
-            className="relative w-full h-full"
+            className="relative w-full h-full" 
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1 }}
@@ -200,13 +273,9 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
                 borderColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)',
               }}
               animate={{ 
-                rotate: 360,
                 scale: isHovered ? 1.1 : 1
               }}
               transition={{ 
-                duration: 20, 
-                repeat: Infinity, 
-                ease: "linear",
                 scale: { type: "spring", stiffness: 300 }
               }}
               whileHover={{
@@ -215,8 +284,7 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
               }}
             >
               <div className="text-xs font-medium text-center">
-                <div className={`${textColor} font-bold`}>Tech</div>
-                <div className={subTextColor}>Stack</div>
+                <HighlightText firstText="Tech" orangeText=" Stacks" />
               </div>
             </motion.div>
 
@@ -283,7 +351,6 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
                       className="object-contain transition-transform duration-300 group-hover:scale-110"
                     />
                     
-                    {/* Skill name */}
                     <motion.span 
                       className={`text-xs font-medium ${textColor} text-center mt-1`}
                       initial={{ opacity: 0, scale: 0.8 }}
@@ -296,7 +363,6 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
                       {skill.name}
                     </motion.span>
 
-                    {/* Glow effect */}
                     <motion.div
                       className="absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-400/20 to-purple-500/20"
                       initial={{ scale: 1, opacity: 0 }}
@@ -375,7 +441,6 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
                       className="object-contain transition-transform duration-300 group-hover:scale-110"
                     />
                     
-                    {/* Skill name */}
                     <motion.span 
                       className={`text-xs font-medium ${textColor} text-center mt-1`}
                       initial={{ opacity: 0, scale: 0.8 }}
@@ -388,7 +453,6 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
                       {skill.name}
                     </motion.span>
 
-                    {/* Glow effect */}
                     <motion.div
                       className="absolute inset-0 rounded-xl bg-gradient-to-r from-orange-400/15 to-purple-500/15"
                       initial={{ scale: 1, opacity: 0 }}
@@ -424,7 +488,7 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
         </div>
 
         {/* Marquee Section */}
-        <motion.div
+        {/* <motion.div
           className="mb-20"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -461,38 +525,7 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
               ))}
             </Marquee>
           </div>
-        </motion.div>
-
-        {/* Stats Section */}
-        <motion.div
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-        >
-          {[
-            { number: skills.length, label: 'Technologies' },
-            { number: '5+', label: 'Years Experience' },
-            { number: '50+', label: 'Projects Completed' },
-            { number: '∞', label: 'Passion' },
-          ].map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              className="text-center p-6 rounded-2xl backdrop-blur-sm border"
-              style={{
-                background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)',
-                borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-              }}
-              whileHover={{ scale: 1.05, y: -5 }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <div className={`text-3xl font-bold mb-2 bg-gradient-to-r from-orange-400 to-purple-500 bg-clip-text text-transparent`}>
-                {stat.number}
-              </div>
-              <div className={`text-sm ${subTextColor}`}>{stat.label}</div>
-            </motion.div>
-          ))}
-        </motion.div>
+        </motion.div> */}
       </div>
     </section>
   );
