@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import Marquee from "react-fast-marquee";
+// import Marquee from "react-fast-marquee";
 import { motion } from "framer-motion";
 
 import HighlightText from "../ui/HighlightText";
@@ -23,7 +23,7 @@ interface Position {
   y: number;
 }
 
-export default function SkillShowcase({ title = "My Skills", skills }: SkillShowcaseProps) {
+export default function SkillShowcase({ skills }: SkillShowcaseProps) {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -32,23 +32,14 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
   const [isCursorInSection, setIsCursorInSection] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-    generateRandomPositions();
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [skills.length]);
+  setMounted(true);
 
   // Generate non-overlapping random positions
   const generateRandomPositions = () => {
     const positions: Position[] = [];
-    const screenWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
-    const screenHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
-    
+    const screenWidth = typeof window !== "undefined" ? window.innerWidth : 1200;
+    const screenHeight = typeof window !== "undefined" ? window.innerHeight : 800;
+
     for (let i = 0; i < skills.length; i++) {
       let position: Position;
       let attempts = 0;
@@ -60,11 +51,10 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
           y: (Math.random() - 0.5) * (screenHeight - 300),
         };
 
-        // Check if this position overlaps with existing ones
-        validPosition = positions.every(existingPos => {
+        validPosition = positions.every((existingPos) => {
           const distance = Math.sqrt(
-            Math.pow(position.x - existingPos.x, 2) + 
-            Math.pow(position.y - existingPos.y, 2)
+            Math.pow(position.x - existingPos.x, 2) +
+              Math.pow(position.y - existingPos.y, 2)
           );
           return distance > 150;
         });
@@ -76,7 +66,6 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
         attempts++;
       }
 
-      // If couldn't find non-overlapping position, use a calculated position
       if (!validPosition) {
         const angle = (i / skills.length) * 2 * Math.PI;
         const radius = 200 + (i % 3) * 50;
@@ -86,9 +75,20 @@ export default function SkillShowcase({ title = "My Skills", skills }: SkillShow
         });
       }
     }
-    
+
     setRandomPositions(positions);
   };
+
+  generateRandomPositions();
+
+  const handleMouseMove = (e: MouseEvent) => {
+    setMousePosition({ x: e.clientX, y: e.clientY });
+  };
+
+  window.addEventListener("mousemove", handleMouseMove);
+  return () => window.removeEventListener("mousemove", handleMouseMove);
+}, [skills.length]);
+
 
   if (!mounted) return null;
 

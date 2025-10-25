@@ -4,6 +4,7 @@ import { lufga } from "@/lib/fonts";
 import Navbar from "@/components/common/Navbar"
 
 import { Urbanist as UrbanistCreator } from 'next/font/google';
+import Footer from "@/components/common/Footer";
 
 const urbanist = UrbanistCreator({
   subsets: ['latin'],
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Navbar />
           <main className="pt-20">{children}</main>
+          <Footer/>
         </ThemeProvider>
       </body>
     </html>

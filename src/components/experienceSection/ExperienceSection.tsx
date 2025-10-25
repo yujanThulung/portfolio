@@ -368,7 +368,7 @@ export default function ExperienceSection({ experiences }: ExperienceSectionProp
             { icon: <Clock size={24} />, value: '5+', label: 'Years Exp' },
             { icon: <Users size={24} />, value: '50+', label: 'Projects' },
             { icon: <Code size={24} />, value: '20+', label: 'Technologies' },
-          ].map((stat, index) => (
+          ].map((stat) => (
             <motion.div
               key={stat.label}
               className={`text-center p-6 rounded-2xl backdrop-blur-sm border ${

@@ -17,7 +17,7 @@ export default function ServicesSection() {
       title: "UI/UX Design",
       images: [
         { src: "/images/service/landing1.jpg" },
-        { src: "/images/ux-design-2.jpg" },
+        { src: "/images/service/landing1.jpg" },
         { src: "/images/service/landing2.png" },
       ],
     },
@@ -25,7 +25,7 @@ export default function ServicesSection() {
       title: "Web Design",
       images: [
         { src: "/images/service/landing1.jpg" },
-        { src: "/images/web-design-2.jpg" },
+        { src: "/images/service/landing1.jpg" },
         { src: "/images/service/landing1.jpg" },
       ],
     },
@@ -33,7 +33,7 @@ export default function ServicesSection() {
       title: "Landing Page",
       images: [
         { src: "/images/service/landing1.jpg" },
-        { src: "/images/landing-page-2.jpg" },
+        { src: "/images/service/landing2.png" },
         { src: "/images/service/landing2.png" },
       ],
     },
@@ -41,15 +41,15 @@ export default function ServicesSection() {
       title: "Mobile App",
       images: [
         { src: "/images/service/landing1.jpg" },
-        { src: "/images/mobile-app-2.jpg" },
         { src: "/images/service/landing2.png" },
+        { src: "/images/service/landing1.jpg" },
       ],
     },
     {
       title: "Brand Identity",
       images: [
         { src: "/images/service/landing1.jpg" },
-        { src: "/images/brand-2.jpg" },
+        { src: "/images/service/landing1.jpg" },
         { src: "/images/service/landing2.png" },
       ],
     },

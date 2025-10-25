@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
@@ -9,30 +7,43 @@ interface GlassCardProps {
   images: { src: string; alt?: string }[];
 }
 
+// ✅ Extend React.CSSProperties to accept CSS variables
+interface CSSVariableStyle extends React.CSSProperties {
+  "--r"?: string;
+  "--s"?: string;
+  "--x"?: string;
+  "--y"?: string;
+  "--_m"?: string;
+  "--_g"?: string;
+  "--_d"?: string;
+}
+
 export default function GlassCard({ title, images }: GlassCardProps) {
   const layerStyles = [
-    {
-      top: "8px",
-      scale: "0.9",
-      opacity: "1",
-      zIndex: 1,
-      bg: "rgba(255,255,255,0.12)",
-    },
-    {
-      top: "28px",
-      scale: "0.95",
-      opacity: "1",
-      zIndex: 5,
-      bg: "rgba(255,255,255,0.18)",
-    },
-    {
-      top: "48px",
-      scale: "1",
-      opacity: "1",
-      zIndex: 10,
-      bg: "rgba(255,255,255,0.25)",
-    },
+    { top: "8px", scale: "0.9", opacity: "1", zIndex: 1, bg: "rgba(255,255,255,0.12)" },
+    { top: "28px", scale: "0.95", opacity: "1", zIndex: 5, bg: "rgba(255,255,255,0.18)" },
+    { top: "48px", scale: "1", opacity: "1", zIndex: 10, bg: "rgba(255,255,255,0.25)" },
   ];
+
+  // ✅ Properly typed inline style object
+  const cardStyle: CSSVariableStyle = {
+    "--r": "24px",
+    "--s": "45px",
+    "--x": "20px",
+    "--y": "20px",
+    "--_m": "/calc(2*var(--r)) calc(2*var(--r)) radial-gradient(#000 70%, #0000 72%)",
+    "--_g": "conic-gradient(from 90deg at calc(100% - var(--r)) calc(100% - var(--r)), #0000 25%, #000 0)",
+    "--_d": "(var(--s) + var(--r))",
+    mask: `
+      calc(100% - var(--_d) - var(--x)) 100% var(--_m),
+      100% calc(100% - var(--_d) - var(--y)) var(--_m),
+      radial-gradient(var(--s) at 100% 100%, #0000 99%, #000 calc(100% + 1px))
+        calc(-1*var(--r) - var(--x)) calc(-1*var(--r) - var(--y)),
+      var(--_g) calc(-1*var(--_d) - var(--x)) 0,
+      var(--_g) 0 calc(-1*var(--_d) - var(--y))
+    `,
+    maskRepeat: "no-repeat",
+  };
 
   return (
     <div className="relative w-[320px] h-[340px] group">
@@ -44,32 +55,17 @@ export default function GlassCard({ title, images }: GlassCardProps) {
           flex flex-col justify-between transition-all duration-300
           hover:scale-[1.02] hover:shadow-[0_12px_35px_rgba(0,0,0,0.35)]
           pt-3"
-        style={{
-          ["--r" as any]: "24px",
-          ["--s" as any]: "45px",
-          ["--x" as any]: "20px",
-          ["--y" as any]: "20px",
-          ["--_m" as any]: "/calc(2*var(--r)) calc(2*var(--r)) radial-gradient(#000 70%, #0000 72%)",
-          ["--_g" as any]: "conic-gradient(from 90deg at calc(100% - var(--r)) calc(100% - var(--r)), #0000 25%, #000 0)",
-          ["--_d" as any]: "(var(--s) + var(--r))",
-          mask: `
-            calc(100% - var(--_d) - var(--x)) 100% var(--_m),
-            100% calc(100% - var(--_d) - var(--y)) var(--_m),
-            radial-gradient(var(--s) at 100% 100%, #0000 99%, #000 calc(100% + 1px))
-              calc(-1*var(--r) - var(--x)) calc(-1*var(--r) - var(--y)),
-            var(--_g) calc(-1*var(--_d) - var(--x)) 0,
-            var(--_g) 0 calc(-1*var(--_d) - var(--y))
-          `,
-          maskRepeat: "no-repeat",
-        }}
+        style={cardStyle}
       >
-        {/* Subtle glow effect */}
+        {/* Subtle glow */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,255,255,0.2),transparent_60%)] -z-10" />
 
         {/* Header */}
         <div>
-          <h2 className="p-6 font-lufga pb-0 text-xl font-semibold text-white tracking-wide mb-3">{title}</h2>
-          <div className="h-[1px] bg-white/30 mb-4"></div>
+          <h2 className="p-6 font-lufga pb-0 text-xl font-semibold text-white tracking-wide mb-3">
+            {title}
+          </h2>
+          <div className="h-[1px] bg-white/30 mb-4" />
         </div>
 
         {/* Image stack */}

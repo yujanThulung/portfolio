@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { motion, Variants } from "framer-motion";
-import { ArrowRight } from "lucide-react";
 
 // Reusable shake/hover animation variants
 const hoverShakeVariants: Variants = {
@@ -64,7 +63,13 @@ export default function HeroSection() {
           initial="rest"
           animate={isHovered ? "hover" : "rest"}
         >
-          <img src={"/icons/wave1.png"} alt="wave1" />
+          <Image
+            src="/icons/wave1.png"
+            alt="wave1"
+            width={30}
+            height={30}
+            priority
+          />
         </motion.span>
 
         <motion.span
@@ -73,12 +78,20 @@ export default function HeroSection() {
           initial="rest"
           animate={isHovered ? "hover" : "rest"}
         >
-          <img src={"/icons/wave2.png"} alt="wave2" />
+          <Image
+            src="/icons/wave2.png"
+            alt="wave2"
+            width={64}
+            height={64}
+            priority
+          />
         </motion.span>
 
         <h1 className={`text-5xl md:text-7xl leading-tight tracking-wider ${textColor}`}>
           I&apos;m{" "}
-          <span className={`${isDark ? "text-orange-300" : "text-orange-400"}`}>YUJAN</span>
+          <span className={`${isDark ? "text-orange-300" : "text-orange-400"}`}>
+            YUJAN
+          </span>
           , <br />
           Web Developer
         </h1>
@@ -86,7 +99,7 @@ export default function HeroSection() {
 
       {/* --- Main Section --- */}
       <div className="relative z-10 max-w-7xl w-full flex flex-col md:flex-row items-center justify-between gap-10 md:gap-16 mt-10">
-        {/* --- Left Quote (animated) --- */}
+        {/* --- Left Quote --- */}
         <motion.div
           className="flex-1 text-center md:text-left space-y-4 mb-[20rem] md:mb-[30rem]"
           variants={hoverShakeVariants}
@@ -99,19 +112,19 @@ export default function HeroSection() {
             width={64}
             height={64}
             className="mx-auto md:mx-0"
+            priority
           />
           <p className={`max-w-sm mx-auto md:mx-0 italic ${subTextColor}`}>
             “Yujan’s exceptional web design ensures our project’s success. Highly recommended!”
           </p>
         </motion.div>
 
-        {/* --- Center Image with Animated Vector Behind --- */}
+        {/* --- Center Image --- */}
         <div
           className="relative flex flex-col items-center justify-center mt-12"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          {/* Orange Circle (hover trigger) */}
           <div
             className={`relative w-[28rem] h-[28rem] md:w-[34rem] md:h-[34rem] rounded-t-full ${circleColor} transition-colors duration-500`}
           ></div>
@@ -126,7 +139,14 @@ export default function HeroSection() {
             }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
           >
-            <img src={"/images/bgVector.png"} alt="bgVector" className="w-[55rem] md:w-[75rem]" />
+            <Image
+              src="/images/bgVector.png"
+              alt="bgVector"
+              width={1000}
+              height={600}
+              className="w-[55rem] md:w-[75rem]"
+              priority
+            />
           </motion.span>
 
           {/* Main Image */}
@@ -138,25 +158,9 @@ export default function HeroSection() {
             priority
             className={`absolute -translate-y-80 z-10 object-cover scale-110 transition-transform duration-500 ${imageFilter}`}
           />
-
-          {/* Buttons */}
-          {/* <div className="flex gap-4 mt-8 z-20">
-            <button className="flex items-center gap-2 bg-orange-500 text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-orange-600 transition">
-              Portfolio <ArrowRight className="w-4 h-4" />
-            </button>
-            <button
-              className={`border px-6 py-3 rounded-full text-sm font-medium transition ${
-                isDark
-                  ? "border-gray-600 text-gray-100 hover:bg-neutral-800"
-                  : "border-gray-300 text-gray-900 hover:bg-gray-100"
-              }`}
-            >
-              Hire me
-            </button>
-          </div> */}
         </div>
 
-        {/* --- Right Experience (animated) --- */}
+        {/* --- Right Experience --- */}
         <motion.div
           className="flex-1 text-center md:text-left space-y-2 mb-[20rem] md:mb-[30rem]"
           variants={hoverShakeVariants}

@@ -1,6 +1,8 @@
 "use client";
 
 import clsx from "clsx";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 interface HighlightTextProps {
   firstText: string;
@@ -15,20 +17,37 @@ export default function HighlightText({
   lastText,
   size = "md",
 }: HighlightTextProps) {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+
+  const isDark = theme === "dark";
+
   const sizeClass = clsx({
-    "text-sm": size === "sm",
-    "text-md": size === "md",
-    "text-lg": size === "lg",
-    "text-3xl": size === "3xl",
-    "text-4xl": size === "4xl",
-    "text-5xl": size === "5xl"
+    "text-sm sm:text-base": size === "sm",
+    "text-md sm:text-lg": size === "md",
+    "text-lg sm:text-xl": size === "lg",
+    "text-3xl sm:text-4xl": size === "3xl",
+    "text-4xl sm:text-5xl": size === "4xl",
+    "text-5xl sm:text-6xl": size === "5xl",
   });
 
+  const baseTextColor = isDark ? "text-white" : "text-black";
+  const orangeTextColor = "text-orange-500";
+
   return (
-    <h2 className={clsx("font-semibold", sizeClass)}>
-      <span className="text-gray-50">{firstText}</span>
-      {orangeText && <span className="text-orange-500 font-semibold">{orangeText}</span>}
-      {lastText && <span className="text ">{orangeText}</span>}
+    <h2
+      className={clsx(
+        "font-semibold font-urbanist tracking-wide text-center md:text-left transition-colors duration-300",
+        sizeClass
+      )}
+    >
+      <span className={baseTextColor}>{firstText} </span>
+      {orangeText && (
+        <span className={clsx(orangeTextColor, "font-bold")}>{orangeText} </span>
+      )}
+      {lastText && <span className={baseTextColor}>{lastText}</span>}
     </h2>
   );
 }

@@ -1,20 +1,8 @@
 import HeroSection from "@/components/hero/HeroSection";
-import Button from "@/components/ui/Button";
-import Image from "next/image";
-import { ArrowRight, Mail } from "lucide-react";
-import HighlightText from "@/components/ui/HighlightText";
-import GlassCard from "@/components/ui/GlassCard";
 import ServicesSection from "@/components/servicesSection/ServicesSection";
 import SkillShowcase from "@/components/skillShowcase/SkillShowcase";
 import ExperienceSection from "@/components/experienceSection/ExperienceSection";
-import Footer from "@/footer/Footer";
 
-
-const imageList = [
-  { src: "/images/yujan.png", alt: "Design 1" },
-  { src: "/images/yujan.png", alt: "Design 2" },
-  { src: "/images/service/landing1.jpg", alt: "Design 3" },
-];
 
 const skills = [
   { name: "HTML5", logo: "/images/skills/html.svg" },
@@ -122,7 +110,6 @@ export default function Home() {
       <div className="relative z-0">
         <SkillShowcase skills={skills} />
         <ExperienceSection experiences={sampleExperiences} />
-        <Footer/>
       </div>
     </div>
   );
