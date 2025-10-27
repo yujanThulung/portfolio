@@ -1,5 +1,5 @@
 import HeroSection from "@/components/hero/HeroSection";
-import ServicesSection from "@/components/servicesSection/ServicesSection";
+import ProjectsSection from "@/components/projectsSection/ProjectsSection";
 import SkillShowcase from "@/components/skillShowcase/SkillShowcase";
 import ExperienceSection from "@/components/experienceSection/ExperienceSection";
 
@@ -104,7 +104,7 @@ export default function Home() {
 
       {/* ServicesSection overlapping the bottom 5% */}
       <div className="absolute top-[95vh] left-0 w-full z-10 bg-neutral-900">
-        <ServicesSection />
+        <ProjectsSection />
       </div>
       <div className="h-[100vh]" />
       <div className="relative z-0">
