@@ -31,66 +31,63 @@ const skills = [
 const sampleExperiences = [
   {
     id: "1",
-    company: "TechCorp Inc.",
-    role: "Senior Frontend Developer",
-    period: "2022 - Present",
-    location: "San Francisco, CA",
-    type: "full-time" as const,
-    website: "https://techcorp.com",
+    company: "Web Studio Nepal",
+    role: "Frontend Intern",
+    period: "Aug 2025 – Oct 2025",
+    location: "Kathmandu, Nepal",
+    type: "internship" as const,
+    website: "#",
     description: [
-      "Lead the development of responsive web applications using React, Next.js, and TypeScript",
-      "Collaborate with UX designers to implement pixel-perfect interfaces and improve user experience",
-      "Mentor junior developers and conduct code reviews to maintain code quality standards",
-      "Optimize application performance, reducing load times by 40% through code splitting and lazy loading"
+      "Learned to write best practice, optimize, and secure code",
+      "Worked on real-world frontend projects using React and Next.js",
+      "Collaborated with team members to deliver responsive and dynamic web interfaces"
     ],
-    technologies: ["React", "TypeScript", "Next.js", "Tailwind CSS", "GraphQL", "Jest"],
+    technologies: ["React", "Next.js", "Tailwind CSS", "JavaScript", "Redux Toolkit", "TanStack Query"],
     achievements: [
-      "Reduced bundle size by 60% through advanced code splitting",
-      "Improved Lighthouse score from 75 to 95+",
-      "Led migration from legacy Angular to React, improving developer productivity"
+      "Completed internship project successfully with optimized and maintainable code",
+      "Gained hands-on experience in professional frontend development workflow"
     ]
   },
   {
     id: "2",
-    company: "StartupXYZ",
-    role: "Full Stack Developer",
-    period: "2020 - 2022",
-    location: "Remote",
-    type: "full-time" as const,
+    company: "Salyansthan Secondary School",
+    role: "Teacher (Math & Science, Grades 1-5)",
+    period: "2023 - 2024",
+    location: "Kathmandu, Nepal",
+    type: "part-time" as const,
     description: [
-      "Developed and maintained full-stack applications using MERN stack",
-      "Implemented real-time features using WebSockets and Socket.io",
-      "Designed and deployed cloud infrastructure on AWS",
-      "Worked closely with product team to deliver features on tight deadlines"
+      "Taught Math and Science to Grades 1 to 5 using engaging and interactive methods",
+      "Delivered customized lessons to support students' diverse needs"
     ],
-    technologies: ["React", "Node.js", "MongoDB", "Express", "AWS", "Docker"],
+    technologies: [],
     achievements: [
-      "Built MVP from scratch that secured Series A funding",
-      "Scaled application to handle 10k+ concurrent users",
-      "Reduced server costs by 30% through infrastructure optimization"
+      "Improved student engagement and learning outcomes through tailored teaching methods",
+      "Developed creative lesson plans for primary education"
     ]
   },
-  {
-    id: "3",
-    company: "Freelance Projects",
-    role: "Web Developer",
-    period: "2019 - 2020",
-    location: "Remote",
-    type: "freelance" as const,
-    description: [
-      "Developed custom websites and web applications for various clients",
-      "Implemented responsive designs and cross-browser compatibility",
-      "Provided ongoing maintenance and support services",
-      "Collaborated with clients to understand requirements and deliver solutions"
-    ],
-    technologies: ["JavaScript", "Vue.js", "PHP", "WordPress", "CSS3", "MySQL"],
-    achievements: [
-      "Delivered 15+ projects with 100% client satisfaction",
-      "Maintained long-term relationships with 80% of clients",
-      "Improved client website performance by average of 50%"
-    ]
-  }
+  // {
+  //   id: "1",
+  //   company: "TechCorp Inc.",
+  //   role: "Senior Frontend Developer",
+  //   period: "2022 - Present",
+  //   location: "San Francisco, CA",
+  //   type: "full-time" as const,
+  //   website: "https://techcorp.com",
+  //   description: [
+  //     "Lead the development of responsive web applications using React, Next.js, and TypeScript",
+  //     "Collaborate with UX designers to implement pixel-perfect interfaces and improve user experience",
+  //     "Mentor junior developers and conduct code reviews to maintain code quality standards",
+  //     "Optimize application performance, reducing load times by 40% through code splitting and lazy loading"
+  //   ],
+  //   technologies: ["React", "TypeScript", "Next.js", "Tailwind CSS", "GraphQL", "Jest"],
+  //   achievements: [
+  //     "Reduced bundle size by 60% through advanced code splitting",
+  //     "Improved Lighthouse score from 75 to 95+",
+  //     "Led migration from legacy Angular to React, improving developer productivity"
+  //   ]
+  // },
 ];
+
 
 
 

@@ -15,7 +15,7 @@ interface Experience {
   location: string;
   description: string[];
   technologies: string[];
-  type: "full-time" | "part-time" | "contract" | "freelance";
+  type: "full-time" | "part-time" | "contract" | "freelance" | "internship";
   logo?: string;
   website?: string;
   achievements?: string[];
@@ -54,6 +54,10 @@ export default function ExperienceSection({ experiences }: ExperienceSectionProp
       'part-time': isDark ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' : 'bg-blue-500/20 text-blue-700 border-blue-500/30',
       'contract': isDark ? 'bg-purple-500/20 text-purple-400 border-purple-500/30' : 'bg-purple-500/20 text-purple-700 border-purple-500/30',
       'freelance': isDark ? 'bg-orange-500/20 text-orange-400 border-orange-500/30' : 'bg-orange-500/20 text-orange-700 border-orange-500/30',
+      'internship': isDark
+  ? 'bg-teal-500/20 text-teal-400 border-teal-500/30'
+  : 'bg-teal-500/20 text-teal-700 border-teal-500/30'
+
     };
     return colors[type];
   };
@@ -133,13 +137,13 @@ export default function ExperienceSection({ experiences }: ExperienceSectionProp
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
-          className="text-center mb-16"
+          className="flex justify-betweentext-center mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
           <HighlightText firstText="Work" orangeText=" Experience" size="4xl" />
-          <p className={`${subTextColor} mt-4 text-lg max-w-2xl mx-auto`}>
+          <p className={`${subTextColor} mt-4 text-lg text-center max-w-2xl mx-auto`}>
             My professional journey through the tech industry, building innovative solutions and growing with each challenge.
           </p>
         </motion.div>
@@ -365,8 +369,8 @@ export default function ExperienceSection({ experiences }: ExperienceSectionProp
         >
           {[
             { icon: <Award size={24} />, value: `${experiences.length}+`, label: 'Roles' },
-            { icon: <Clock size={24} />, value: '5+', label: 'Years Exp' },
-            { icon: <Users size={24} />, value: '50+', label: 'Projects' },
+            { icon: <Clock size={24} />, value: '1+', label: 'Years Exp' },
+            { icon: <Users size={24} />, value: '20+', label: 'Projects' },
             { icon: <Code size={24} />, value: '20+', label: 'Technologies' },
           ].map((stat) => (
             <motion.div
