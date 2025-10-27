@@ -14,12 +14,25 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname()?.replace(/\/$/, "") || "/";
 
-  // detect scroll
+  // 🧭 Detect scroll
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // 🚫 Disable scroll when mobile menu is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden"; // lock scroll
+    } else {
+      document.body.style.overflow = ""; // restore scroll
+    }
+
+    return () => {
+      document.body.style.overflow = ""; // cleanup
+    };
+  }, [isOpen]);
 
   return (
     <motion.nav
@@ -27,7 +40,7 @@ export default function Navbar() {
       animate={{
         top: isScrolled ? 24 : 0,
         width: isScrolled ? "75%" : "100%",
-        borderRadius: isScrolled ? 9999 : 0, // smooth radius change
+        borderRadius: isScrolled ? 9999 : 0,
         left: isScrolled ? "50%" : 0,
         x: isScrolled ? "-50%" : 0,
       }}
@@ -37,7 +50,7 @@ export default function Navbar() {
       }}
       className={`fixed font-sans font-light z-50 shadow-lg 
         bg-white dark:bg-neutral-900 text-gray-900 dark:text-white
-        overflow-hidden`} // prevent flicker during radius change
+        overflow-hidden`}
       style={{ transformOrigin: "top center" }}
     >
       {/* Inner Wrapper with Dynamic Padding */}
@@ -48,16 +61,19 @@ export default function Navbar() {
             : "px-10 sm:px-20 lg:px-32 py-6"
         }`}
       >
-        {/* Mobile Toggle */}
-        <button
-          className="md:hidden text-gray-900 dark:text-white"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle Menu"
-        >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* ✅ Mobile View (ThemeSwitch left, Menu right) */}
+        <div className="flex items-center justify-between w-full md:hidden">
+          <ThemeSwitch />
+          <button
+            className="text-gray-900 dark:text-white"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle Menu"
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
 
-        {/* Desktop Nav */}
+        {/* ✅ Desktop Nav */}
         <div className="hidden md:flex items-center justify-between w-full">
           {/* Left Links */}
           <div className="flex items-center space-x-4">
@@ -90,7 +106,7 @@ export default function Navbar() {
             </div>
 
             <motion.div
-              className="font-light tracking-wide text-gray-900 dark:text-white overflow-hidden"
+              className="font-light tracking-wide text-gray-900 dark:text-white overflow-hidden hidden lg:block"
               initial={{ width: "3rem" }}
               animate={{ width: hovered ? "10rem" : "3rem" }}
               transition={{ type: "spring", stiffness: 200, damping: 20 }}
@@ -144,10 +160,10 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* ✅ Mobile Menu */}
       <div
         className={`md:hidden bg-white dark:bg-neutral-900 transition-all duration-300 overflow-hidden ${
-          isOpen ? "max-h-64 py-4" : "max-h-0"
+          isOpen ? "h-screen py-4" : "max-h-0"
         }`}
       >
         <div className="flex flex-col items-center space-y-4">
