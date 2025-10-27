@@ -1,6 +1,7 @@
 "use client";
 
 import { useTheme } from "next-themes";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
@@ -14,6 +15,7 @@ import {
     Calendar,
     ExternalLink,
 } from "lucide-react";
+
 
 interface FooterProps {
     phoneNumber?: string;
@@ -32,6 +34,7 @@ export default function Footer({
     twitterUrl = "",
     location = "Kathmandu, Nepal",
 }: FooterProps) {
+    const { theme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const [currentYear] = useState(new Date().getFullYear());
     const [isVisible, setIsVisible] = useState(false);
@@ -45,11 +48,15 @@ export default function Footer({
 
     if (!mounted) return null;
 
+    const isDark = theme === "dark";
+
     // ✅ Always keep black footer
     const bgColor = "bg-black";
     const subTextColor = "text-gray-400";
     const borderColor = "border-gray-800";
-    const hoverColor = "hover:bg-white/10";
+    const hoverColor = isDark
+        ? "hover:bg-orange-500 hover:text-white"
+        : "hover:bg-orange-500 hover:text-gray-900";
 
     const socialLinks = [
         { icon: <Linkedin size={20} />, href: linkedinUrl, label: "LinkedIn", color: "hover:text-blue-400" },
@@ -64,12 +71,13 @@ export default function Footer({
     ];
 
     const quickLinks = [
-        { name: "About", href: "#about" },
-        { name: "Skills", href: "#skills" },
-        { name: "Experience", href: "#experience" },
-        { name: "Projects", href: "#projects" },
-        { name: "Contact", href: "#contact" },
+        { name: "About", href: "/about" },
+        { name: "Skills", href: "/skills" },
+        { name: "Experience", href: "/experience" },
+        { name: "Projects", href: "/projects" },
+        { name: "Contact", href: "/contact" },
     ];
+
 
     return (
         <footer className={`relative ${bgColor} border-t ${borderColor} text-white`} >
@@ -127,14 +135,21 @@ export default function Footer({
                 </motion.div>
 
                 {/* Main Footer Sections */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 py-12">
+                <div
+                    className="
+    px-6 sm:px-8 md:px-12 lg:px-16 
+    grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 
+    gap-8 sm:gap-10 md:gap-12 
+    py-12 md:py-16
+  "
+                >
                     {/* About */}
-                    <div>
+                    <div className="text-center sm:text-left">
                         <h3 className="text-xl font-bold mb-4">Yujan Rai</h3>
-                        <p className={`${subTextColor} mb-6`}>
+                        <p className={`${subTextColor} mb-6 max-w-md mx-auto sm:mx-0`}>
                             Full-Stack Developer passionate about creating impactful digital experiences.
                         </p>
-                        <div className="flex gap-4">
+                        <div className="flex justify-center sm:justify-start flex-wrap gap-4">
                             {socialLinks.map((social) => (
                                 <motion.a
                                     key={social.label}
@@ -152,14 +167,14 @@ export default function Footer({
                     </div>
 
                     {/* Contact */}
-                    <div>
+                    <div className="text-center sm:text-left">
                         <h4 className="font-semibold mb-6">Get In Touch</h4>
                         <div className="space-y-4">
                             {contactInfo.map((contact, i) => (
                                 <motion.a
                                     key={i}
                                     href={contact.href}
-                                    className={`flex items-center gap-3 ${subTextColor} hover:text-orange-500 transition-colors duration-300`}
+                                    className={`flex items-center justify-center sm:justify-start gap-3 ${subTextColor} hover:text-orange-500 transition-colors duration-300`}
                                     whileHover={{ x: 5 }}
                                 >
                                     <div className={`p-2 rounded-lg ${hoverColor}`}>{contact.icon}</div>
@@ -170,42 +185,39 @@ export default function Footer({
                     </div>
 
                     {/* Quick Links */}
-                    <div>
-                        <h4 className="font-semibold mb-6">Quick Links</h4>
-                        <div className="space-y-3">
-                            {quickLinks.map((link, i) => (
+                    <div className="space-y-3">
+                        {quickLinks.map((link, i) => (
+                            <Link key={i} href={link.href} legacyBehavior>
                                 <motion.a
-                                    key={i}
-                                    href={link.href}
                                     className={`block ${subTextColor} hover:text-orange-500 text-sm transition-colors duration-300`}
                                     whileHover={{ x: 5 }}
                                 >
                                     {link.name}
                                 </motion.a>
-                            ))}
-                        </div>
+                            </Link>
+                        ))}
                     </div>
 
+
                     {/* Availability */}
-                    <div>
+                    <div className="text-center sm:text-left">
                         <h4 className="font-semibold mb-6">Availability</h4>
                         <div className="p-4 rounded-2xl border border-gray-800 bg-white/5">
-                            <div className="flex items-center gap-3 mb-3">
+                            <div className="flex items-center justify-center sm:justify-start gap-3 mb-3">
                                 <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse" />
-                                <span className="font-medium text-sm text-white">
-                                    Available for work
-                                </span>
+                                <span className="font-medium text-sm text-white">Available for work</span>
                             </div>
                             <p className="text-gray-400 text-sm mb-4">
                                 Currently accepting new projects and opportunities for {currentYear}
                             </p>
-                            <div className="flex items-center gap-2 text-xs text-gray-500">
+                            <div className="flex items-center justify-center sm:justify-start gap-2 text-xs text-gray-500">
                                 <Calendar size={12} />
                                 <span>Response time: within 24 hours</span>
                             </div>
                         </div>
                     </div>
                 </div>
+
 
                 {/* Bottom Bar */}
                 <div className="border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 py-6">
@@ -217,16 +229,47 @@ export default function Footer({
                 </div>
             </div>
 
-            {/* Scroll To Top */}
+
+            {/* Floating Social Buttons */}
+            <div className="fixed bottom-28 right-8 flex flex-col gap-3 z-50">
+                <motion.a
+                    href="https://www.linkedin.com/in/yujan-rai/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`p-3 rounded-2xl border ${borderColor} transition-all duration-300 backdrop-blur-md
+    ${isDark ? "bg-neutral-900/60 text-gray-300 hover:text-blue-400" : `bg-white/60 text-gray-700 ${hoverColor}`}`}
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                >
+                    <Linkedin size={20} />
+                </motion.a>
+
+
+                <motion.a
+                    href="https://github.com/yujanThulung"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`p-3 rounded-2xl border ${borderColor} transition-all duration-300 backdrop-blur-md
+    ${isDark ? "bg-neutral-900/60 text-gray-300 hover:text-gray-300" : `bg-white/60 text-gray-700 ${hoverColor}`}`}
+                    whileHover={{ scale: 1.1, y: -2 }}
+                    whileTap={{ scale: 0.95 }}
+                >
+                    <Github size={20} />
+                </motion.a>
+
+            </div>
+
+            {/* Scroll To Top Button */}
             <motion.button
                 onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                className={`fixed bottom-8 right-8 p-3 rounded-2xl border ${borderColor} ${hoverColor} transition-all duration-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-                    }`}
+                className={`fixed bottom-8 right-8 p-3 rounded-2xl border ${borderColor} ${hoverColor} transition-all duration-300
+          ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
             >
-                <ArrowUp size={20} className="text-white" />
+                <ArrowUp size={20} className={isDark ? "text-white" : "text-gray-700"} />
             </motion.button>
-        </footer>
+
+        </footer >
     );
 }
