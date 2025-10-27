@@ -56,7 +56,7 @@ export default function HeroSection() {
     >
       {/* --- Top Heading Section --- */}
       <motion.div
-        className="relative z-10 text-center font-urbanist text-sm  font-semibold mt-10"
+        className="relative z-0 text-center font-urbanist text-sm  font-semibold mt-10"
         animate={{
           y: isHovered ? 350 : 0,
           opacity: isHovered ? 0 : 1,

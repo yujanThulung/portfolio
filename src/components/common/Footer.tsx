@@ -72,7 +72,7 @@ export default function Footer({
     ];
 
     return (
-        <footer className={`relative ${bgColor} border-t ${borderColor} text-white`}>
+        <footer className={`relative ${bgColor} border-t ${borderColor} text-white`} >
             {/* Background accents */}
             <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute -top-32 left-1/4 w-64 h-64 rounded-full bg-orange-500 blur-3xl opacity-10" />

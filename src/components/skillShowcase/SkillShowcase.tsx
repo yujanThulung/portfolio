@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-// import Marquee from "react-fast-marquee";
+import Marquee from "react-fast-marquee";
 import { motion } from "framer-motion";
 
 import HighlightText from "../ui/HighlightText";
@@ -488,13 +488,13 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
         </div>
 
         {/* Marquee Section */}
-        {/* <motion.div
+        <motion.div
           className="mb-20"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-8 lg:hidden">
             <Marquee speed={50} pauseOnHover gradient={false}>
               {skills.map((skill, index) => (
                 <motion.div
@@ -525,7 +525,7 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
               ))}
             </Marquee>
           </div>
-        </motion.div> */}
+        </motion.div>
       </div>
     </section>
   );

@@ -103,7 +103,7 @@ export default function Home() {
       </div>
 
       {/* ServicesSection overlapping the bottom 5% */}
-      <div className="absolute top-[95vh] left-0 w-full z-2 bg-neutral-900">
+      <div className="absolute top-[95vh] left-0 w-full z-10 bg-neutral-900">
         <ServicesSection />
       </div>
       <div className="h-[100vh]" />
