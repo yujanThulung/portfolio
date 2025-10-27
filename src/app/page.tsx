@@ -98,7 +98,7 @@ export default function Home() {
   return (
     <div className="relative">
       {/* Hero Section with 95% viewport height */}
-      <div className="h-[95vh] overflow-hidden">
+      <div className="h-[100vh] overflow-hidden">
         <HeroSection />
       </div>
 

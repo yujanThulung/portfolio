@@ -1,26 +1,41 @@
 "use client";
 
+import { useMediaQuery } from "react-responsive";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { motion, Variants } from "framer-motion";
 
-// Reusable shake/hover animation variants
-const hoverShakeVariants: Variants = {
-  rest: {
-    y: [0, -10, 10, -5, 5, 0],
-    transition: { duration: 0.6, ease: [0.42, 0, 0.58, 1] },
-  },
-  hover: {
-    y: -200,
-    transition: { duration: 0.4, ease: [0.42, 0, 0.58, 1] },
-  },
-};
-
 export default function HeroSection() {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const isLg = useMediaQuery({ minWidth: 1024 });
+  const isMd = useMediaQuery({ minWidth: 768, maxWidth: 1023 });
+  const isSm = useMediaQuery({ maxWidth: 767 });
+
+
+
+  const getYValue = () => {
+    if (!isHovered) return 0;
+    if (isLg) return -300;
+    if (isMd) -150;
+    return -100;
+  }
+
+  // Reusable shake/hover animation variants
+  const hoverShakeVariants: Variants = {
+    rest: {
+      y: [0, -10, 10, -5, 5, 0],
+      transition: { duration: 0.6, ease: [0.42, 0, 0.58, 1] },
+    },
+    hover: {
+      y: getYValue(),
+      transition: { duration: 0.4, ease: [0.42, 0, 0.58, 1] },
+    },
+  };
+
+
 
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
@@ -37,11 +52,11 @@ export default function HeroSection() {
 
   return (
     <section
-      className={`relative w-full min-h-screen flex flex-col justify-center items-center px-6 md:px-16 overflow-hidden transition-colors duration-500 ${bgColor}`}
+      className={`relative w-full min-h-screen flex flex-col justify-center items-center md:px-16 overflow-hidden transition-colors duration-500 ${bgColor}`}
     >
       {/* --- Top Heading Section --- */}
       <motion.div
-        className="relative z-10 text-center font-urbanist font-semibold mt-10"
+        className="relative z-10 text-center font-urbanist text-sm  font-semibold mt-10"
         animate={{
           y: isHovered ? 350 : 0,
           opacity: isHovered ? 0 : 1,
@@ -51,14 +66,14 @@ export default function HeroSection() {
         <div
           className={`inline-block px-3 py-0 border rounded-full text-sm font-medium mb-3 ${
             isDark ? "border-gray-600 text-gray-200" : "border-gray-300 text-gray-800"
-          }`}
+            }`}
         >
           Hello!
         </div>
 
         {/* Decorative waves */}
         <motion.span
-          className="absolute top-[-20px] right-54"
+          className="absolute top-[-25px] lg:top-[-20px] lg:right-54"
           variants={hoverShakeVariants}
           initial="rest"
           animate={isHovered ? "hover" : "rest"}
@@ -73,7 +88,7 @@ export default function HeroSection() {
         </motion.span>
 
         <motion.span
-          className="absolute left-[-48px] top-44"
+          className="absolute left-[-44px] top-[80px] lg:left-[-48px] lg:top-44"
           variants={hoverShakeVariants}
           initial="rest"
           animate={isHovered ? "hover" : "rest"}
@@ -87,7 +102,7 @@ export default function HeroSection() {
           />
         </motion.span>
 
-        <h1 className={`text-5xl md:text-7xl leading-tight tracking-wider ${textColor}`}>
+        <h1 className={`text-4xl  md:text-7xl lg:leading-tight lg:tracking-wider ${textColor}`}>
           I&apos;m{" "}
           <span className={`${isDark ? "text-orange-300" : "text-orange-400"}`}>
             YUJAN
@@ -98,10 +113,10 @@ export default function HeroSection() {
       </motion.div>
 
       {/* --- Main Section --- */}
-      <div className="relative z-10 max-w-7xl w-full flex flex-col md:flex-row items-center justify-between gap-10 md:gap-16 mt-10">
+      <div className="relative z-10 max-w-7xl w-full flex flex-col md:flex-row items-center justify-between  md:gap-16 md:mt-30">
         {/* --- Left Quote --- */}
         <motion.div
-          className="flex-1 text-center md:text-left space-y-4 mb-[20rem] md:mb-[30rem]"
+          className="flex-1 text-center order-1 md:text-left md:space-y-4  md:mb-[30rem]"
           variants={hoverShakeVariants}
           initial="rest"
           animate={isHovered ? "hover" : "rest"}
@@ -121,7 +136,7 @@ export default function HeroSection() {
 
         {/* --- Center Image --- */}
         <div
-          className="relative flex flex-col items-center justify-center mt-12"
+          className="relative flex flex-col items-center justify-center mt-54 lg:mt-8 order-2"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
@@ -144,7 +159,7 @@ export default function HeroSection() {
               alt="bgVector"
               width={1000}
               height={600}
-              className="w-[55rem] md:w-[75rem]"
+              className="w-[45rem] md:w-[75rem]"
               priority
             />
           </motion.span>
@@ -162,15 +177,14 @@ export default function HeroSection() {
 
         {/* --- Right Experience --- */}
         <motion.div
-          className="flex-1 text-center md:text-left space-y-2 mb-[20rem] md:mb-[30rem]"
+          className="flex-1 text-center md:text-right lg:space-y-2 order-1 lg:order-3  md:mb-[30rem]"
           variants={hoverShakeVariants}
           initial="rest"
           animate={isHovered ? "hover" : "rest"}
         >
           <div
-            className={`flex justify-center md:justify-start gap-1 ${
-              isDark ? "text-orange-300" : "text-orange-400"
-            } text-xl`}
+            className={`flex justify-center md:justify-end gap-1 ${isDark ? "text-orange-300" : "text-orange-400"
+              } text-xl`}
           >
             {Array.from({ length: 5 }).map((_, i) => (
               <span key={i}>★</span>
