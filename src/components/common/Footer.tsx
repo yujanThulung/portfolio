@@ -13,9 +13,8 @@ import {
     MapPin,
     ArrowUp,
     Calendar,
-    ExternalLink,
 } from "lucide-react";
-import { navLinks } from "@/data/navLinks"; 
+import { navLinks } from "@/data/navLinks";
 
 
 interface FooterProps {
@@ -80,14 +79,6 @@ export default function Footer({
         { icon: <Phone size={18} />, value: phoneNumber, href: `tel:${phoneNumber}` },
         { icon: <Mail size={18} />, value: email, href: `mailto:${email}` },
         { icon: <MapPin size={18} />, value: location, href: "#" },
-    ];
-
-    const quickLinks = [
-        { name: "About", href: "/about" },
-        { name: "Skills", href: "/#skills" },
-        { name: "Experience", href: "/#experience" },
-        { name: "Projects", href: "/#projects" },
-        { name: "Contact", href: "/#contact" },
     ];
 
 
@@ -197,22 +188,22 @@ export default function Footer({
                         </div>
                     </div>
 
-                     {/* ✅ Quick Links from navLinks */}
-          <div className="text-center sm:text-left">
-            <h4 className="font-semibold mb-6">Quick Links</h4>
-            <div className="space-y-3">
-              {navLinks.map((link) => (
-                <Link key={link.name} href={link.path} legacyBehavior>
-                  <motion.a
-                    className={`block ${subTextColor} hover:text-orange-500 text-sm transition-colors duration-300`}
-                    whileHover={{ x: 5 }}
-                  >
-                    {link.name}
-                  </motion.a>
-                </Link>
-              ))}
-            </div>
-          </div>
+                    {/* ✅ Quick Links from navLinks */}
+                    <div className="text-center sm:text-left">
+                        <h4 className="font-semibold mb-6">Quick Links</h4>
+                        <div className="space-y-3">
+                            {navLinks.map((link) => (
+                                <Link key={link.name} href={link.path} legacyBehavior>
+                                    <motion.a
+                                        className={`block ${subTextColor} hover:text-orange-500 text-sm transition-colors duration-300`}
+                                        whileHover={{ x: 5 }}
+                                    >
+                                        {link.name}
+                                    </motion.a>
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
 
 
                     {/* Availability */}

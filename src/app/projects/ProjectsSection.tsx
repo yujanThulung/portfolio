@@ -6,7 +6,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 import GlassCard from "@/components/ui/GlassCard";
-import HighlightText from "@/components/ui/HighlightText";
 import { projects } from "@/data/projects";
 import "swiper/css";
 

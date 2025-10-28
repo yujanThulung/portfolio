@@ -15,7 +15,7 @@ import {
 } from "react-icons/fa";
 
 export default function ResumeSection() {
-  const { theme, resolvedTheme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -31,7 +31,6 @@ export default function ResumeSection() {
   const textMuted = isDark ? "text-gray-400" : "text-gray-600";
   const cardBg = isDark ? "bg-gray-800/50 backdrop-blur-sm" : "bg-white/80 backdrop-blur-sm";
   const borderColor = isDark ? "border-gray-700" : "border-gray-200";
-  const hoverColor = isDark ? "hover:bg-gray-700" : "hover:bg-gray-100";
 
   const resumeUrl = "/Yujan_Rai_Resume.pdf";
 

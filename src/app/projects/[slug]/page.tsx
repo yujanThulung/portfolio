@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
-import { projects } from "@/data/projects";
+import { projects } from "@/data/projects"
+import Image from "next/image";
+
 import { 
   FaArrowLeft, 
   FaGithub, 
@@ -23,7 +25,7 @@ import {
 
 export default function ProjectDetailPage() {
   const { slug } = useParams();
-  const { theme, resolvedTheme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [selectedImage, setSelectedImage] = useState<number | null>(null);
   const [imageLoaded, setImageLoaded] = useState<boolean[]>([]);
@@ -262,7 +264,7 @@ export default function ProjectDetailPage() {
                     onClick={() => openModal(i)}
                   >
                     <div className={`relative overflow-hidden rounded-xl shadow-2xl border ${borderColor} ${hoverBorder} transition-all duration-300`}>
-                      <img
+                      <Image
                         src={image.src}
                         alt={`${project.title} screenshot ${i + 1}`}
                         className="w-full h-48 sm:h-56 object-cover transition-transform duration-500 group-hover:scale-110"
