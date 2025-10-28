@@ -53,10 +53,21 @@ export default function Footer({
     // ✅ Always keep black footer
     const bgColor = "bg-black";
     const subTextColor = "text-gray-400";
-    const borderColor = "border-gray-800";
+    const borderColor = "border-gray-500";
     const hoverColor = isDark
         ? "hover:bg-orange-500 hover:text-white"
         : "hover:bg-orange-500 hover:text-gray-900";
+
+
+    const recipient = "yujanrai03@gmail.com";
+    const subject = encodeURIComponent("Project Inquiry / Hire Request");
+    const body = encodeURIComponent(
+        `Hi Yujan,\n\nI'm interested in working with you! Please let me know how we can proceed.\n\nRegards,\n[Your Name]`
+    );
+
+    // Gmail link (opens in new tab)
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${recipient}&su=${subject}&body=${body}`;
+
 
     const socialLinks = [
         { icon: <Linkedin size={20} />, href: linkedinUrl, label: "LinkedIn", color: "hover:text-blue-400" },
@@ -106,22 +117,21 @@ export default function Footer({
                         Ready to bring your ideas to life? Let’s create something extraordinary.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+
+
                         <motion.a
-                            href={`mailto:${email}`}
+                            href={gmailUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="group px-8 py-4 rounded-2xl font-semibold text-white bg-orange-500 hover:bg-orange-600 transition-all duration-300 shadow-lg flex items-center gap-2"
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                         >
                             <Mail size={20} />
                             Hire Me
-                            <motion.div
-                                className="ml-1"
-                                animate={{ x: [0, 4, 0] }}
-                                transition={{ duration: 1.5, repeat: Infinity }}
-                            >
-                                <ExternalLink size={16} />
-                            </motion.div>
                         </motion.a>
+
+
 
                         <motion.a
                             href={`tel:${phoneNumber}`}
