@@ -496,7 +496,7 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
         >
           <div className="flex flex-col gap-8 lg:hidden">
             <Marquee speed={50} pauseOnHover gradient={false}>
-              {skills.map((skill, index) => (
+              {skills.map((skill) => (
                 <motion.div
                   key={skill.name}
                   className="flex flex-col items-center mx-6 min-w-[5rem]"

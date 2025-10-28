@@ -63,7 +63,9 @@ export default function ExperienceSection({ experiences }: ExperienceSectionProp
   };
 
   return (
-    <section className={`relative w-full min-h-screen py-20 px-6 sm:px-12 lg:px-24 overflow-hidden ${bgColor}`}>
+    <section 
+    id="experience"
+    className={`relative w-full min-h-screen py-20 px-6 sm:px-12 lg:px-24 overflow-hidden ${bgColor}`}>
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Grid Background */}

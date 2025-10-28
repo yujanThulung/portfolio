@@ -12,14 +12,13 @@ export default function HeroSection() {
   const [isHovered, setIsHovered] = useState(false);
   const isLg = useMediaQuery({ minWidth: 1024 });
   const isMd = useMediaQuery({ minWidth: 768, maxWidth: 1023 });
-  const isSm = useMediaQuery({ maxWidth: 767 });
 
 
 
   const getYValue = () => {
     if (!isHovered) return 0;
     if (isLg) return -300;
-    if (isMd) -150;
+    if (isMd) return -150;
     return -100;
   }
 

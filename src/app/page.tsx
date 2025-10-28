@@ -1,5 +1,5 @@
 import HeroSection from "@/components/hero/HeroSection";
-import ProjectsSection from "@/components/projectsSection/ProjectsSection";
+import ProjectsSection from "@/app/projects/ProjectsSection";
 import SkillShowcase from "@/components/skillShowcase/SkillShowcase";
 import ExperienceSection from "@/components/experienceSection/ExperienceSection";
 
