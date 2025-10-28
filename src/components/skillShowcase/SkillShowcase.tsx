@@ -250,7 +250,7 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
 
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
-        <motion.div className="text-center">
+        <motion.div className="flex justify-between">
           <HighlightText firstText="My" orangeText=" Skills" size="4xl" />
           <p className={`${subTextColor} mt-4`}>The digital toolbox that powers my creativity and problem-solving.</p>
         </motion.div>

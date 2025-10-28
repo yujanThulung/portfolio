@@ -19,15 +19,22 @@ export default function ProjectsSection() {
 
   return (
     <section
-    id="projects"
+      id="projects"
       className="min-h-screen rounded-4xl bg-gradient-to-br from-gray-600 to-black py-20 px-8 sm:px-12 md:px-24 lg:px-36 xl:px-48"
       style={{ backgroundImage: "url('/images/bg.jpg')" }}
     >
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-center md:justify-start items-center gap-6 mb-16">
+        <div className="flex flex-col md:flex-row justify-center md:justify-between items-center gap-6 mb-16">
           <div className="flex-shrink-0">
-            <HighlightText firstText="My" orangeText=" Projects" size="4xl" />
+            <div className="flex flex-col md:flex-row justify-center md:justify-start items-center gap-6 mb-16">
+              <div
+                className="font-semibold font-urbanist tracking-wide text-center md:text-left text-4xl sm:text-5xl md:text-6xl transition-colors duration-300"
+              >
+                <span className="text-white">My </span>
+                <span className="text-orange-500 font-bold">Projects</span>
+              </div>
+            </div>
           </div>
           <p className="text-gray-300 font-light text-sm md:max-w-xl leading-relaxed text-center md:text-center">
             I specialize in creating engaging digital experiences that bring ideas to life.
@@ -68,11 +75,10 @@ export default function ProjectsSection() {
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`transition-all duration-300 ${
-                  index === activeIndex
-                    ? "w-8 h-3 bg-orange-500 rounded-full"
-                    : "w-3 h-3 bg-white/30 rounded-full hover:bg-white/50"
-                }`}
+                className={`transition-all duration-300 ${index === activeIndex
+                  ? "w-8 h-3 bg-orange-500 rounded-full"
+                  : "w-3 h-3 bg-white/30 rounded-full hover:bg-white/50"
+                  }`}
               />
             ))}
           </div>

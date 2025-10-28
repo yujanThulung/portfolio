@@ -139,13 +139,13 @@ export default function ExperienceSection({ experiences }: ExperienceSectionProp
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
-          className="flex justify-betweentext-center mb-16"
+          className="flex justify-between  mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
           <HighlightText firstText="Work" orangeText=" Experience" size="4xl" />
-          <p className={`${subTextColor} mt-4 text-lg text-center max-w-2xl mx-auto`}>
+          <p className={`${subTextColor} mt-4 text-lg  max-w-2xl mx-auto`}>
             My professional journey through the tech industry, building innovative solutions and growing with each challenge.
           </p>
         </motion.div>

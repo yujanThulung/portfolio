@@ -149,11 +149,11 @@ export default function ResumeSection() {
               <div className="space-y-3">
                 <div className="flex items-center gap-3">
                   <FaEnvelope className="w-4 h-4 text-orange-500" />
-                  <span className={textMuted}>yujan.rai@example.com</span>
+                  <span className={textMuted}>yujanrai03@gmail.com</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <FaPhone className="w-4 h-4 text-orange-500" />
-                  <span className={textMuted}>+1 (555) 123-4567</span>
+                  <span className={textMuted}>9845371472</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <FaMapMarkerAlt className="w-4 h-4 text-orange-500" />
@@ -177,11 +177,11 @@ export default function ResumeSection() {
                 </div>
                 <div className="flex justify-between">
                   <span className={textMuted}>Pages:</span>
-                  <span className={textColor}>2 Pages</span>
+                  <span className={textColor}>3 Pages</span>
                 </div>
                 <div className="flex justify-between">
                   <span className={textMuted}>Last Updated:</span>
-                  <span className={textColor}>January 2024</span>
+                  <span className={textColor}>October 2025</span>
                 </div>
               </div>
             </div>

@@ -129,7 +129,7 @@ export default function HeroSection() {
             priority
           />
           <p className={`max-w-sm mx-auto md:mx-0 italic ${subTextColor}`}>
-            “Yujan’s exceptional web design ensures our project’s success. Highly recommended!”
+            “Design. Develop. Deliver. Every project with excellence.”
           </p>
         </motion.div>
 
@@ -189,8 +189,8 @@ export default function HeroSection() {
               <span key={i}>★</span>
             ))}
           </div>
-          <h2 className={`text-2xl md:text-3xl font-semibold ${textColor}`}>10 Years</h2>
-          <p className={`text-sm ${subTextColor}`}>Experience</p>
+          <h2 className={`text-2xl md:text-3xl font-semibold ${textColor}`}>15+</h2>
+          <p className={`text-sm ${subTextColor}`}>Projects Completed</p>
         </motion.div>
       </div>
     </section>
