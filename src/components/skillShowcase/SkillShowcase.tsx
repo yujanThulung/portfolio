@@ -32,62 +32,62 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
   const [isCursorInSection, setIsCursorInSection] = useState(false);
 
   useEffect(() => {
-  setMounted(true);
+    setMounted(true);
 
-  // Generate non-overlapping random positions
-  const generateRandomPositions = () => {
-    const positions: Position[] = [];
-    const screenWidth = typeof window !== "undefined" ? window.innerWidth : 1200;
-    const screenHeight = typeof window !== "undefined" ? window.innerHeight : 800;
+    // Generate non-overlapping random positions
+    const generateRandomPositions = () => {
+      const positions: Position[] = [];
+      const screenWidth = typeof window !== "undefined" ? window.innerWidth : 1200;
+      const screenHeight = typeof window !== "undefined" ? window.innerHeight : 800;
 
-    for (let i = 0; i < skills.length; i++) {
-      let position: Position;
-      let attempts = 0;
-      let validPosition = false;
+      for (let i = 0; i < skills.length; i++) {
+        let position: Position;
+        let attempts = 0;
+        let validPosition = false;
 
-      while (!validPosition && attempts < 100) {
-        position = {
-          x: (Math.random() - 0.5) * (screenWidth - 300),
-          y: (Math.random() - 0.5) * (screenHeight - 300),
-        };
+        while (!validPosition && attempts < 100) {
+          position = {
+            x: (Math.random() - 0.5) * (screenWidth - 300),
+            y: (Math.random() - 0.5) * (screenHeight - 300),
+          };
 
-        validPosition = positions.every((existingPos) => {
-          const distance = Math.sqrt(
-            Math.pow(position.x - existingPos.x, 2) +
+          validPosition = positions.every((existingPos) => {
+            const distance = Math.sqrt(
+              Math.pow(position.x - existingPos.x, 2) +
               Math.pow(position.y - existingPos.y, 2)
-          );
-          return distance > 150;
-        });
+            );
+            return distance > 150;
+          });
 
-        if (validPosition) {
-          positions.push(position);
-          break;
+          if (validPosition) {
+            positions.push(position);
+            break;
+          }
+          attempts++;
         }
-        attempts++;
+
+        if (!validPosition) {
+          const angle = (i / skills.length) * 2 * Math.PI;
+          const radius = 200 + (i % 3) * 50;
+          positions.push({
+            x: Math.cos(angle) * radius,
+            y: Math.sin(angle) * radius,
+          });
+        }
       }
 
-      if (!validPosition) {
-        const angle = (i / skills.length) * 2 * Math.PI;
-        const radius = 200 + (i % 3) * 50;
-        positions.push({
-          x: Math.cos(angle) * radius,
-          y: Math.sin(angle) * radius,
-        });
-      }
-    }
+      setRandomPositions(positions);
+    };
 
-    setRandomPositions(positions);
-  };
+    generateRandomPositions();
 
-  generateRandomPositions();
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
 
-  const handleMouseMove = (e: MouseEvent) => {
-    setMousePosition({ x: e.clientX, y: e.clientY });
-  };
-
-  window.addEventListener("mousemove", handleMouseMove);
-  return () => window.removeEventListener("mousemove", handleMouseMove);
-}, [skills.length]);
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [skills.length]);
 
 
   if (!mounted) return null;
@@ -109,12 +109,13 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
 
   const initialSkills = skills.slice(0, 8);
   const remainingSkills = skills.slice(8);
-  
+
   const normalSkills = createCircularArrangement(initialSkills, 120);
   const remainingSkillsNormal = createCircularArrangement(remainingSkills, 160);
 
   return (
-    <section 
+    <section
+      id="skill"
       className={`relative w-full min-h-screen py-20 px-6 sm:px-12 lg:px-24 overflow-hidden ${bgColor}`}
       onMouseEnter={() => setIsCursorInSection(true)}
       onMouseLeave={() => setIsCursorInSection(false)}
@@ -122,7 +123,7 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
       {/* Cursor-responsive Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Animated Grid with enhanced hover effects */}
-        <motion.div 
+        <motion.div
           className="absolute inset-0"
           animate={{
             opacity: isCursorInSection ? 0.4 : 0.3,
@@ -130,14 +131,14 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
             x: mousePosition.x * (isCursorInSection ? -0.02 : -0.01),
             y: mousePosition.y * (isCursorInSection ? -0.02 : -0.01),
           }}
-          transition={{ 
-            type: "spring", 
-            stiffness: isCursorInSection ? 30 : 50, 
-            damping: 20 
+          transition={{
+            type: "spring",
+            stiffness: isCursorInSection ? 30 : 50,
+            damping: 20
           }}
         >
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]" />
-          
+
           {/* Animated gradient overlay on hover */}
           <motion.div
             className="absolute inset-0 bg-gradient-to-r from-orange-400/5 to-purple-500/5"
@@ -157,13 +158,13 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
             scale: isCursorInSection ? 1.2 : 0.8,
             opacity: isCursorInSection ? 0.3 : 0.1,
           }}
-          transition={{ 
-            type: "spring", 
-            stiffness: 100, 
-            damping: 30 
+          transition={{
+            type: "spring",
+            stiffness: 100,
+            damping: 30
           }}
           style={{
-            background: isDark 
+            background: isDark
               ? 'radial-gradient(circle, rgba(168,85,247,0.4) 0%, rgba(99,102,241,0.2) 50%, transparent 70%)'
               : 'radial-gradient(circle, rgba(251,146,60,0.4) 0%, rgba(249,115,22,0.2) 50%, transparent 70%)',
           }}
@@ -173,9 +174,8 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
         {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
-            className={`absolute w-1 h-1 rounded-full ${
-              isDark ? 'bg-purple-400/40' : 'bg-orange-400/40'
-            }`}
+            className={`absolute w-1 h-1 rounded-full ${isDark ? 'bg-purple-400/40' : 'bg-orange-400/40'
+              }`}
             initial={{
               x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1200),
               y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 800),
@@ -238,8 +238,8 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
         <motion.div
           className="absolute inset-0"
           animate={{
-            background: isCursorInSection 
-              ? isDark 
+            background: isCursorInSection
+              ? isDark
                 ? 'radial-gradient(ellipse at center, rgba(168,85,247,0.05) 0%, transparent 50%)'
                 : 'radial-gradient(ellipse at center, rgba(251,146,60,0.05) 0%, transparent 50%)'
               : 'transparent',
@@ -251,14 +251,14 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
       <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
         <motion.div className="text-center">
-          <HighlightText firstText="My" orangeText=" Skills" size="4xl"/>
+          <HighlightText firstText="My" orangeText=" Skills" size="4xl" />
           <p className={`${subTextColor} mt-4`}>The digital toolbox that powers my creativity and problem-solving.</p>
         </motion.div>
 
         {/* Circular Skill Showcase */}
         <div className="relative h-96 mb-28 pt-12 flex items-center justify-center">
           <motion.div
-            className="relative w-full h-full" 
+            className="relative w-full h-full"
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1 }}
@@ -272,10 +272,10 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
                 background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
                 borderColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)',
               }}
-              animate={{ 
+              animate={{
                 scale: isHovered ? 1.1 : 1
               }}
-              transition={{ 
+              transition={{
                 scale: { type: "spring", stiffness: 300 }
               }}
               whileHover={{
@@ -322,18 +322,18 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
                       scale: 1.3,
                       y: -5,
                       zIndex: 50,
-                      transition: { 
-                        type: "spring", 
+                      transition: {
+                        type: "spring",
                         stiffness: 400,
                         damping: 15
                       },
                     }}
                     animate={{
-                      x: isHovered 
-                        ? [0, Math.random() * 8 - 4] 
+                      x: isHovered
+                        ? [0, Math.random() * 8 - 4]
                         : [0, Math.cos(normalPosition.angle) * 5],
-                      y: isHovered 
-                        ? [0, Math.random() * 8 - 4] 
+                      y: isHovered
+                        ? [0, Math.random() * 8 - 4]
                         : [0, Math.sin(normalPosition.angle) * 5],
                     }}
                     transition={{
@@ -350,11 +350,11 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
                       height={32}
                       className="object-contain transition-transform duration-300 group-hover:scale-110"
                     />
-                    
-                    <motion.span 
+
+                    <motion.span
                       className={`text-xs font-medium ${textColor} text-center mt-1`}
                       initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ 
+                      animate={{
                         opacity: isHovered ? 1 : 0,
                         scale: isHovered ? 1 : 0.8
                       }}
@@ -366,7 +366,7 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
                     <motion.div
                       className="absolute inset-0 rounded-2xl bg-gradient-to-r from-orange-400/20 to-purple-500/20"
                       initial={{ scale: 1, opacity: 0 }}
-                      animate={{ 
+                      animate={{
                         scale: isHovered ? 1.3 : 1,
                         opacity: isHovered ? 0.4 : 0
                       }}
@@ -412,18 +412,18 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
                       scale: 1.2,
                       y: -3,
                       zIndex: 40,
-                      transition: { 
-                        type: "spring", 
+                      transition: {
+                        type: "spring",
                         stiffness: 400,
                         damping: 15
                       },
                     }}
                     animate={{
-                      x: isHovered 
-                        ? [0, Math.random() * 6 - 3] 
+                      x: isHovered
+                        ? [0, Math.random() * 6 - 3]
                         : [0, Math.cos(normalPosition.angle) * 4],
-                      y: isHovered 
-                        ? [0, Math.random() * 6 - 3] 
+                      y: isHovered
+                        ? [0, Math.random() * 6 - 3]
                         : [0, Math.sin(normalPosition.angle) * 4],
                     }}
                     transition={{
@@ -440,11 +440,11 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
                       height={24}
                       className="object-contain transition-transform duration-300 group-hover:scale-110"
                     />
-                    
-                    <motion.span 
+
+                    <motion.span
                       className={`text-xs font-medium ${textColor} text-center mt-1`}
                       initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ 
+                      animate={{
                         opacity: isHovered ? 1 : 0,
                         scale: isHovered ? 1 : 0.8
                       }}
@@ -456,7 +456,7 @@ export default function SkillShowcase({ skills }: SkillShowcaseProps) {
                     <motion.div
                       className="absolute inset-0 rounded-xl bg-gradient-to-r from-orange-400/15 to-purple-500/15"
                       initial={{ scale: 1, opacity: 0 }}
-                      animate={{ 
+                      animate={{
                         scale: isHovered ? 1.2 : 1,
                         opacity: isHovered ? 0.3 : 0
                       }}

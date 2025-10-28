@@ -14,6 +14,10 @@ export const navLinks: NavLink[] = [
         path: "/#projects"
     },
     {
+        name: "Skills",
+        path: "/#skill"
+    },
+    {
         name: "Expericence",
         path: "/#experience"
     },
@@ -21,8 +25,5 @@ export const navLinks: NavLink[] = [
         name: "Resume",
         path: "/resume"
     },
-    {
-        name: "Contact",
-        path: "/#contact"
-    }
+    
 ]
