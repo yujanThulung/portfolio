@@ -116,27 +116,28 @@ export default function ProjectDetailPage() {
 
 
   const modalVariants = {
-    hidden: { 
-      opacity: 0,
-      scale: 0.8 
-    },
-    visible: { 
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.3,
-        ease: [0.215, 0.61, 0.355, 1]
-      }
-    },
-    exit: { 
-      opacity: 0,
-      scale: 0.8,
-      transition: {
-        duration: 0.2,
-        ease: [0.55, 0.055, 0.675, 0.19]
-      }
+  hidden: { 
+    opacity: 0,
+    scale: 0.8 
+  },
+  visible: { 
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.3,
+      ease: [0.215, 0.61, 0.355, 1] as [number, number, number, number]
     }
-  };
+  },
+  exit: { 
+    opacity: 0,
+    scale: 0.8,
+    transition: {
+      duration: 0.2,
+      ease: [0.55, 0.055, 0.675, 0.19] as [number, number, number, number]
+    }
+  }
+};
+
 
   const imageVariants = {
     hidden: { opacity: 0 },

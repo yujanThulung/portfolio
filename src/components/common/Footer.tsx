@@ -72,15 +72,16 @@ export default function Footer({
 
     const quickLinks = [
         { name: "About", href: "/about" },
-        { name: "Skills", href: "/skills" },
-        { name: "Experience", href: "/experience" },
-        { name: "Projects", href: "/projects" },
-        { name: "Contact", href: "/contact" },
+        { name: "Skills", href: "/#skills" },
+        { name: "Experience", href: "/#experience" },
+        { name: "Projects", href: "/#projects" },
+        { name: "Contact", href: "/#contact" },
     ];
 
 
     return (
-        <footer className={`relative ${bgColor} border-t ${borderColor} text-white`} >
+        <footer id="#contact"
+            className={`relative ${bgColor} border-t ${borderColor} text-white`} >
             {/* Background accents */}
             <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute -top-32 left-1/4 w-64 h-64 rounded-full bg-orange-500 blur-3xl opacity-10" />
@@ -167,7 +168,8 @@ export default function Footer({
                     </div>
 
                     {/* Contact */}
-                    <div className="text-center sm:text-left">
+                    <div
+                        className="text-center sm:text-left">
                         <h4 className="font-semibold mb-6">Get In Touch</h4>
                         <div className="space-y-4">
                             {contactInfo.map((contact, i) => (

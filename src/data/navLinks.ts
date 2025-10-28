@@ -23,6 +23,6 @@ export const navLinks: NavLink[] = [
     },
     {
         name: "Contact",
-        path: "/contact"
+        path: "/#contact"
     }
 ]
