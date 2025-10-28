@@ -15,6 +15,7 @@ import {
     Calendar,
     ExternalLink,
 } from "lucide-react";
+import { navLinks } from "@/data/navLinks"; 
 
 
 interface FooterProps {
@@ -196,19 +197,22 @@ export default function Footer({
                         </div>
                     </div>
 
-                    {/* Quick Links */}
-                    <div className="space-y-3">
-                        {quickLinks.map((link, i) => (
-                            <Link key={i} href={link.href} legacyBehavior>
-                                <motion.a
-                                    className={`block ${subTextColor} hover:text-orange-500 text-sm transition-colors duration-300`}
-                                    whileHover={{ x: 5 }}
-                                >
-                                    {link.name}
-                                </motion.a>
-                            </Link>
-                        ))}
-                    </div>
+                     {/* ✅ Quick Links from navLinks */}
+          <div className="text-center sm:text-left">
+            <h4 className="font-semibold mb-6">Quick Links</h4>
+            <div className="space-y-3">
+              {navLinks.map((link) => (
+                <Link key={link.name} href={link.path} legacyBehavior>
+                  <motion.a
+                    className={`block ${subTextColor} hover:text-orange-500 text-sm transition-colors duration-300`}
+                    whileHover={{ x: 5 }}
+                  >
+                    {link.name}
+                  </motion.a>
+                </Link>
+              ))}
+            </div>
+          </div>
 
 
                     {/* Availability */}
