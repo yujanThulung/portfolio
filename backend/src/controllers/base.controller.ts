@@ -64,7 +64,40 @@ export class BaseController<T extends Document> {
             return this.sendError(
                 res,
                 error.message,
-                400,
+                500,
+                error
+            )
+        }
+    }
+
+    public getAll = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const page = parseInt(req.query.page as string) || 1;
+            const limit = parseInt(req.query.limit as string) || 10;
+            const skip = (page - 1) * limit;
+
+
+            const [data, total] = await (Promise.all([
+                this.model.find({ isActive: true }).skip(skip).limit(limit),
+                this.model.countDocuments({
+                    isActive: true
+                })
+            ]));
+            
+            return this.sendSuccess(res, {
+                items: data,
+                pagination: {
+                    page,
+                    limit,
+                    total,
+                    pages: Math.ceil(total / limit)
+                }
+            })
+        } catch (error: any) {
+            return this.sendError(
+                res,
+                error.message,
+                500,
                 error
             )
         }
