@@ -83,7 +83,7 @@ export class BaseController<T extends Document> {
                     isActive: true
                 })
             ]));
-            
+
             return this.sendSuccess(res, {
                 items: data,
                 pagination: {
@@ -92,7 +92,38 @@ export class BaseController<T extends Document> {
                     total,
                     pages: Math.ceil(total / limit)
                 }
-            })
+
+            }, "Data fetched successfully")
+        } catch (error: any) {
+            return this.sendError(
+                res,
+                error.message,
+                500,
+                error
+            )
+        }
+    }
+
+    public getById = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const data = await this.model.findOne({
+                _id: req.params.id,
+                isActive: true,
+            });
+
+            if (!data) {
+                return this.sendError(
+                    res,
+                    "Data not found",
+                    404
+                );
+            }
+
+            return this.sendSuccess(
+                res,
+                data,
+                "Data retrived successfully"
+            );
         } catch (error: any) {
             return this.sendError(
                 res,
@@ -103,3 +134,4 @@ export class BaseController<T extends Document> {
         }
     }
 }
+
