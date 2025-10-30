@@ -133,5 +133,40 @@ export class BaseController<T extends Document> {
             )
         }
     }
-}
 
+    public update = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const data = await this.model.findOneAndUpdate(
+                {
+                    _id: req.params.id,
+                    isActive: true,
+                },
+                { $set: req.body },
+                {
+                    new: true, runValidators: true
+                }
+            );
+
+            if (!data) {
+                return this.sendError(
+                    res,
+                    "Data not found",
+                    404
+                )
+            }
+
+            return this.sendSuccess(
+                res,
+                data,
+                "Data updated successfully"
+            )
+        } catch (error: any) {
+            return this.sendError(
+                res,
+                error.message,
+                500,
+                error
+            )
+        }
+    }
+}
