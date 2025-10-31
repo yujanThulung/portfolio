@@ -71,37 +71,29 @@ export abstract class BaseController<T extends Document> {
 
     public getAll = async (req: Request, res: Response): Promise<Response> => {
         try {
-            const page = parseInt(req.query.page as string) || 1;
-            const limit = parseInt(req.query.limit as string) || 10;
-            const skip = (page - 1) * limit;
+            const features = new APIFeatures(
+                this.model.find({ isActive: true }),
+                req.query
+            )
+                .filter()
+                .search(this.searchFields)
+                .sort()
+                .limitFields()
+                .pagination();
 
+            const { results, pagination } = await features.getResults();
 
-            const [data, total] = await (Promise.all([
-                this.model.find({ isActive: true }).skip(skip).limit(limit),
-                this.model.countDocuments({
-                    isActive: true
-                })
-            ]));
 
             return this.sendSuccess(res, {
-                items: data,
-                pagination: {
-                    page,
-                    limit,
-                    total,
-                    pages: Math.ceil(total / limit)
-                }
-
-            }, "Data fetched successfully")
+                items: results,
+                pagination
+            }, `All ${this.model.modelName} retrived successfully`);
         } catch (error: any) {
-            return this.sendError(
-                res,
-                error.message,
-                500,
-                error
-            )
+            Logger.error(`Error getting all ${this.model.modelName}:`, error);
+            return this.sendError(res, error.message, 500);
         }
     }
+
 
     public getById = async (req: Request, res: Response): Promise<Response> => {
         try {
@@ -113,7 +105,7 @@ export abstract class BaseController<T extends Document> {
             if (!data) {
                 return this.sendError(
                     res,
-                    "Data not found",
+                    `${this.model.modelName} not found`,
                     404
                 );
             }
@@ -121,14 +113,14 @@ export abstract class BaseController<T extends Document> {
             return this.sendSuccess(
                 res,
                 data,
-                "Data retrived successfully"
+                `${this.model.modelName} retrieved successfully`
             );
         } catch (error: any) {
+             Logger.error(`Error fetching ${this.model.modelName}:`, error);
             return this.sendError(
                 res,
                 error.message,
                 500,
-                error
             )
         }
     }
