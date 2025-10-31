@@ -1,52 +1,44 @@
 import { Request, Response } from 'express';
-import { Model, Document } from 'mongoose';
-import { error } from 'node:console';
-import { cachedDataVersionTag } from 'node:v8';
+import { Model, Document, FilterQuery } from 'mongoose';
+import { APIFeatures } from '../utils/apiFeatures.utils';
+import { Logger } from '../utils/logger.utils';
+import { ApiResponse } from '../types/express';
 
-export interface ApiResponse<T> {
-    success: boolean;
-    message: string;
-    data?: T;
-    error?: any;
-    pagination?: {
-        page: number;
-        limit: number;
-        total: number;
-        pages: number;
-    };
 
-}
 
-export class BaseController<T extends Document> {
-    protected model: Model<T>;
+export abstract class BaseController<T extends Document> {
+    protected abstract model: Model<T>;
+    protected abstract searchFields: string[];
 
-    constructor(model: Model<T>) {
-        this.model = model;
-    }
 
     protected sendSuccess(
         res: Response,
         data: any,
         message: string = 'Success',
-        statusCode: number = 200): Response {
-        return res.status(statusCode).json({
+        statusCode: number = 200
+    ): Response {
+        const response: ApiResponse = {
             success: true,
             message,
             data
-        });
+        };
+        return res.status(statusCode).json(response);
     }
 
     protected sendError(
         res: Response,
-        message: string = 'Error',
+        message: string = 'Internal server error',
         statusCode: number = 500,
-        error?: any
+        errors?: any[]
     ): Response {
-        return res.status(statusCode).json({
+        const response: ApiResponse = {
             success: false,
             message,
-            error
-        });
+        };
+        if (errors) {
+            response.data = { errors };
+        }
+        return res.status(statusCode).json(response);
     }
 
 
@@ -55,18 +47,25 @@ export class BaseController<T extends Document> {
         try {
             const data = new this.model(req.body);
             const savedData = await data.save();
+            Logger.info(`${this.model.modelName} created successfully, {id: ${savedData._id}`)
             return this.sendSuccess(
                 res,
                 savedData,
-                "Data created successfully",
+                `${this.model.modelName} created successfully`,
                 201)
         } catch (error: any) {
-            return this.sendError(
-                res,
-                error.message,
-                500,
-                error
-            )
+            Logger.error(`Error creating ${this.model.modelName}:`, error);
+
+            if (error.name === 'ValidationError') {
+                const errors = Object.values(error.errors).map((err: any) => err.message);
+                return this.sendError(res, 'Validation failed', 400, errors);
+            }
+
+            if (error.code === 11000) {
+                return this.sendError(res, 'Duplicate field value entered', 400);
+            }
+
+            return this.sendError(res, error.message, 400);
         }
     }
 
