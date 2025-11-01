@@ -30,6 +30,16 @@ export class UserController extends BaseController<IUser> {
             const token = user.generateAuthToken();
             const refreshToken = user.generateRefreshToken();
 
+
+            // Set access token as HttpOnly cookie
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+                maxAge: 60 * 60 * 1000, // 1 hour (or your token expiry)
+            });
+
+
             // Set refresh token as HttpOnly cookie
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
@@ -87,6 +97,16 @@ export class UserController extends BaseController<IUser> {
             const token = user.generateAuthToken();
             const refreshToken = user.generateRefreshToken();
 
+
+            // Set access token as HttpOnly cookie
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+                maxAge: 60 * 60 * 1000, // 1 hour
+            });
+
+
             // Set refresh token as HttpOnly cookie
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
@@ -116,6 +136,29 @@ export class UserController extends BaseController<IUser> {
                 error.message,
                 500
             )
+        }
+    }
+
+
+    //Get profile
+    public getProfile = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const user = await User.findById(req.user?.id);
+            if (!user) {
+                return this.sendError(
+                    res,
+                    'User not found',
+                    404
+                )
+            }
+            return this.sendSuccess(
+                res,
+                user,
+                'Profile retrieved successfully'
+            );
+        } catch (error: any) {
+            Logger.error('Error getting profile:', error);
+            return this.sendError(res, error.message, 500);
         }
     }
 

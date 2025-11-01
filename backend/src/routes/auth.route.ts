@@ -6,6 +6,7 @@ import {
   loginSchema, 
   refreshTokenSchema 
 } from '../schemas/auth.schemas';
+import { authenticate } from '../middleware/auth.middleware';
 
 const router = Router();
 
@@ -19,6 +20,11 @@ router.post('/login',
   validateBody(loginSchema), 
   (req, res) => userController.login(req, res)
 );
+
+router.get('/profile', authenticate,
+  (req, res) => userController.getProfile(req, res)
+);
+
 
 router.post('/refresh-token', 
   validateBody(refreshTokenSchema), 

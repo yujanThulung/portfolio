@@ -12,7 +12,7 @@ export const emailSchema = z.string()
     .trim();
 
 
-    
+
 export const passwordSchema = z
     .string()
     .min(6, 'Password must be at least 6 characters long')
