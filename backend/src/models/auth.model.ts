@@ -12,6 +12,7 @@ export interface IUser extends Document {
     updatedAt: Date;
     comparePassword(candidatePassword: string): Promise<boolean>;
     generateAuthToken(): string;
+    generateRefreshToken(): string;
 }
 
 export interface IUserModel extends Model<IUser> {
@@ -91,6 +92,23 @@ userSchema.methods.generateAuthToken = function (): string {
         { expiresIn } as SignOptions
     );
 };
+
+
+// Metthod to generate refresh token
+userSchema.methods.generateRefreshToken = function (): string {
+    const secret: Secret = process.env.JWT_REFRESH_SECRET ?? "fallback_refresh_secret";
+    const expiresIn: string | number = process.env.JWT_REFRESH_EXPIRE ?? "30d";
+
+    const payload = { id: this._id };
+
+    return jwt.sign(
+        payload, 
+        secret, 
+        { expiresIn } as SignOptions);
+};
+
+
+
 
 
 

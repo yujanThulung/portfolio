@@ -6,35 +6,50 @@ import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 
 import { database } from './config/db';
-import userRoutes from './routes/user.route';
+import userRoutes from './routes/auth.route';
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Security & Middleware
-app.use(helmet());
+app.use(helmet({
+    crossOriginResourcePolicy: {
+        policy: "cross-origin"
+    }
+}));
+
 app.use(compression());
 
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100,
-    message: 'Too many requests from this IP, please try again later.',
-    statusCode: 429
+    windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000'), // 15 minutes
+    max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100'),
+    message: {
+        success: false,
+        message: 'Too many requests from this IP, please try again later.'
+    },
+    standardHeaders: true,
+    legacyHeaders: false
 });
+
 app.use(limiter);
 
 // CORS
 app.use(cors({
     origin: process.env.CLIENT_URL || 'http://localhost:3000',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
     credentials: true
 }));
 
 // Body parser
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({
+    limit: process.env.MAX_FILE_SIZE || '10mb'
+}));
+app.use(express.urlencoded({
+    extended: true,
+    limit: process.env.MAX_FILE_SIZE || '10mb'
+}));
 
 // Static files
 app.use('/uploads', express.static('uploads'));
@@ -46,11 +61,11 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/api/users', userRoutes);
+app.use('/api/v1/auth', userRoutes);
 console.log('✅ Routes registered: /api/users');
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/api/v1/health', (req, res) => {
     res.status(200).json({
         status: 'OK',
         timestamp: new Date().toISOString(),
