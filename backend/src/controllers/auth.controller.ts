@@ -3,6 +3,7 @@ import User, { IUser } from '../models/auth.model';
 import { BaseController } from "./base.controller";
 import { Logger } from '../utils/logger.utils';
 import jwt from 'jsonwebtoken';
+import { LoginInput, RegisterInput } from "../schemas/auth.schemas";
 
 export class UserController extends BaseController<IUser> {
     protected model = User;
@@ -14,7 +15,9 @@ export class UserController extends BaseController<IUser> {
 
     public register = async (req: Request, res: Response): Promise<Response> => {
         try {
-            const { name, email, password, role } = req.body;
+            // Use validated data instead of req.body
+            const { name, email, password, role } = (req as any).validatedData as RegisterInput;
+
             const existingUser = await User.findByEmail(email);
 
             if (existingUser) {
@@ -31,7 +34,7 @@ export class UserController extends BaseController<IUser> {
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict', // adjust based on your frontend
+                sameSite: 'strict',
                 maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
             });
 
@@ -52,9 +55,10 @@ export class UserController extends BaseController<IUser> {
 
     public login = async (req: Request, res: Response): Promise<Response> => {
         try {
-            const { email, password } = req.body;
+            // Use validated data instead of req.body
+            const { email, password } = (req as any).validatedData as LoginInput;
 
-            //Find user and include password 
+            // Find user and include password 
             const user = await User.findOne({
                 email,
                 isActive: true
@@ -68,7 +72,7 @@ export class UserController extends BaseController<IUser> {
                 );
             }
 
-            //Check password
+            // Check password
             const isPasswordValid = await user.comparePassword(password);
 
             if (!isPasswordValid) {
@@ -87,11 +91,11 @@ export class UserController extends BaseController<IUser> {
             res.cookie('refreshToken', refreshToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict', // adjust based on your frontend
+                sameSite: 'strict',
                 maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
             });
 
-            //User response without password
+            // User response without password
             const userResponse = user.toJSON();
 
             Logger.info('User logged in successfully', { userId: user._id });
