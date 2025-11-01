@@ -37,3 +37,10 @@ export interface JwtPayload {
     iat?: number;
     exp?: number;
 }
+
+
+export interface IUserPayload {
+    id: string;
+    email: string;
+    role: 'user' | 'admin';
+}
