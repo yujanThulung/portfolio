@@ -4,7 +4,8 @@ import { validateBody } from '../middleware/validation.middleware';
 import { 
   registerSchema, 
   loginSchema, 
-  refreshTokenSchema 
+  refreshTokenSchema, 
+  updateProfileSchema
 } from '../schemas/auth.schemas';
 import { authenticate } from '../middleware/auth.middleware';
 
@@ -24,6 +25,11 @@ router.post('/login',
 router.get('/profile', authenticate,
   (req, res) => userController.getProfile(req, res)
 );
+
+router.patch('/profile',authenticate, validateBody(updateProfileSchema),(req,res)=>{
+  userController.updateProfile(req,res)
+})
+
 
 
 router.post('/refresh-token', 

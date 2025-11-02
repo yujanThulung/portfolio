@@ -3,7 +3,11 @@ import User, { IUser } from '../models/auth.model';
 import { BaseController } from "./base.controller";
 import { Logger } from '../utils/logger.utils';
 import jwt from 'jsonwebtoken';
-import { LoginInput, RegisterInput } from "../schemas/auth.schemas";
+import {
+    LoginInput,
+    RegisterInput,
+    UpdateProfileInput
+} from "../schemas/auth.schemas";
 
 export class UserController extends BaseController<IUser> {
     protected model = User;
@@ -162,6 +166,53 @@ export class UserController extends BaseController<IUser> {
         }
     }
 
+
+    public updateProfile = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const updateData = (req as any).validatedData as UpdateProfileInput;
+
+            const { password, role, ...allowedUpdates } = updateData as any;
+
+            const user = await User.findByIdAndUpdate(
+                req.user?.id,
+                { $set: allowedUpdates },
+                {
+                    new: true,
+                    runValidators: true,
+                    context: 'query'
+                }
+            );
+
+            if (!user) {
+                return this.sendError(
+                    res,
+                    'User not found',
+                    404
+                )
+            }
+
+            Logger.info('User profile updated successfully', {
+                userId: user._id,
+                updatedFields: Object.keys(allowedUpdates)
+            });
+            return this.sendSuccess(
+                res,
+                user,
+                'Profile updated successfully'
+            )
+        } catch (error: any) {
+            Logger.error(
+                'Error updating user profile:', {
+                userId: req.user?.id,
+                error: error.message
+            });
+            return this.sendError(
+                res,
+                error.message,
+                400
+            );
+        }
+    }
 
     public refreshToken = async (req: Request, res: Response): Promise<Response> => {
         try {
