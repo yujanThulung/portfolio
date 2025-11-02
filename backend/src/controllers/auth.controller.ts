@@ -214,6 +214,35 @@ export class UserController extends BaseController<IUser> {
         }
     }
 
+
+    public logout = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            //Clear both cookies
+            res.clearCookie('token');
+            res.clearCookie('refreshToken');
+
+            Logger.info('User logged out successfully', {
+                userId: req.user?.id
+            });
+            return this.sendSuccess(
+                res,
+                {},
+                'User logged out successfully'
+            );
+        } catch (error: any) {
+            Logger.error('Error during logout:', {
+                userId: req.user?.id,
+                error: error.message
+            });
+            return this.sendError(
+                res,
+                error.message,
+                500
+            )
+        }
+    }
+
+
     public refreshToken = async (req: Request, res: Response): Promise<Response> => {
         try {
             const token = req.cookies.refreshToken;
