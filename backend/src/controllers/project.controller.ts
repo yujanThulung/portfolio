@@ -88,7 +88,67 @@ export class ProjectController extends BaseController<IProject> {
     }
 
 
-    
+    //Bulk update projects
+    public bulkUpdate = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const { ids, updateData } = req.body;
+
+            if (!Array.isArray(ids) || ids.length === 0) {
+                return this.sendError(
+                    res,
+                    'Invalid project IDs',
+                    400,
+                )
+            }
+
+            //Add updateBy if user is authenticated
+            if (req.user) {
+                updateData.updateBy = req.user.id;
+            }
+
+            const result = await this.model.updateMany(
+                {
+                    _id: {
+                        $in: ids
+                    },
+                    isActive: true
+                },
+                {
+                    $set: updateData
+                }
+            );
+
+            if (result.modifiedCount === 0) {
+                return this.sendError(
+                    res,
+                    'No projects were updated',
+                    404
+                )
+            }
+
+            Logger.info(
+                'Projects updated successfully',
+                {
+                    count: result.modifiedCount
+                }
+            );
+
+            return this.sendSuccess(
+                res,
+                { modifiedCount: result.modifiedCount },
+                `${result.modifiedCount} projects updated successfully`
+            );
+        } catch (error: any) {
+            Logger.error(
+                'Error in bulk update:', error
+            );
+            return this.sendError(
+                res,
+                error.message,
+                500
+            )
+        }
+    }
 
 }
 
