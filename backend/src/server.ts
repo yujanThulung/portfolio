@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 
 import { database } from './config/db';
 import userRoutes from './routes/auth.route';
+import projecsRoutes from './routes/project.route';
 
 dotenv.config();
 const app = express();
@@ -62,6 +63,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use('/api/v1/auth', userRoutes);
+app.use('/api/v1/projects', projecsRoutes)
 console.log('✅ Routes registered: /api/users');
 
 // Health check

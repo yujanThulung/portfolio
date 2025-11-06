@@ -138,15 +138,6 @@ const projectSchema = new Schema<IProject, IProjectModel>({
         type: Boolean,
         default: true
     },
-    createdBy: {
-        type: Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
-    updatedBy: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    }
 }, {
     timestamps: true
 });
