@@ -232,6 +232,72 @@ export class ProjectController extends BaseController<IProject> {
         }
     }
 
+
+    //Delete specific project images
+    public deleteImages = async (
+        req: Request,
+        res: Response
+    ): Promise<Response> => {
+        try {
+
+            const { id } = req.params;
+            const { publicIds } = req.body;
+
+            if (!publicIds || !Array.isArray(publicIds)) {
+                return this.sendError(
+                    res,
+                    'Invalid public IDs',
+                    400
+                )
+            }
+
+            //Find project
+            const project = await this.model.findById(id);
+            if (!project) {
+                return this.sendError(
+                    res,
+                    'Project not found',
+                    404
+                );
+            }
+
+            //Delete from Cloudinary
+            await cloudinaryService.deleteMultipleImages(publicIds);
+
+
+            //Remove form project 
+            project.images = project.images.filter(
+                (img: any) => !publicIds.includes(img.public_id)
+            );
+
+            // Update updatedBy if user is authenticated
+            if (req.user) {
+                project.updatedBy = req.user.id;
+            }
+
+            await project.save();
+
+            Logger.info('Project images deleted', {
+                id: project._id,
+                deleteCount: project.images.length
+            })
+
+            return this.sendSuccess(
+                res,
+                { deletedCount: publicIds.length },
+                'Image deleted successfully',
+                200
+            )
+
+        } catch (error: any) {
+            Logger.error('Error deleting project images:', error);
+            return this.sendError(
+                res,
+                error.message,
+                500
+            )
+        }
+    }
     //Override create to handle slug generation and user tracking 
     public create = async (req: Request, res: Response): Promise<Response> => {
         try {
