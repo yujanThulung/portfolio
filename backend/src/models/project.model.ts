@@ -3,6 +3,7 @@ import { Schema, Document, Model, Types } from 'mongoose';
 
 export interface IProjectImage {
     src: string;
+    public_id: string;
     alt?: string;
     caption?: string;
 }
@@ -42,6 +43,11 @@ const projectImageSchema = new Schema<IProjectImage>({
     src: {
         type: String,
         required: [true, 'Image source is required'],
+        trim: true
+    },
+    public_id: {
+        type: String,
+        required: [true, 'Image public ID is required'],
         trim: true
     },
     alt: {
