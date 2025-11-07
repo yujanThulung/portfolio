@@ -3,6 +3,7 @@ import Project, { IProject } from '../models/project.model';
 import { BaseController } from "../controllers/base.controller";
 import { Logger } from "../utils/logger.utils";
 import { APIFeatures } from "../utils/apiFeatures.utils";
+import { cloudinaryService } from "../config/cloudinary.config";
 
 export class ProjectController extends BaseController<IProject> {
     protected model = Project;
@@ -33,6 +34,203 @@ export class ProjectController extends BaseController<IProject> {
         }
     }
 
+
+
+    //Upload project images 
+    public uploadImages = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            if (!req.files || !(req.files as any).images) {
+                return this.sendError(
+                    res,
+                    'No images provided',
+                    400
+                );
+            }
+
+            const files = (req.files as any).images as Express.Multer.File[];
+
+
+            //Upload to Cloudinary
+            const uploadedImages = await cloudinaryService.uploadMultipleImages(files, 'projects');
+
+            //Transform to project images format
+            const projectImages = uploadedImages.map(img => ({
+                src: img.src,
+                public_id: img.public_id,
+                alt: img.alt
+            }));
+
+            return this.sendSuccess(
+                res,
+                projectImages,
+                'Images uploaded successfully',
+                201
+            )
+        } catch (error: any) {
+            Logger.error('Error uploading images:', error);
+            return this.sendError(
+                res,
+                'Failed to upload images',
+                500
+            );
+
+        }
+    }
+
+
+    //Create project with image upload
+    public createWithImages = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const projectData = req.body;
+
+            //Handle image upload if files are present
+            if (req.files && (req.files as any).images) {
+                const files = (req.files as any).images as Express.Multer.File[];
+
+                //Upload to Cloudinary
+
+                if (files && files.length > 0) {
+                    const updatedImages = await cloudinaryService.uploadMultipleImages(files, 'projects');
+
+                    projectData.images = updatedImages.map(img => ({
+                        src: img.src,
+                        public_id: img.public_id,
+                        alt: img.alt
+                    }));
+                }
+            }
+
+
+            //Add createdBy if user is authenticated
+            if (req.user) {
+                projectData.createdBy = req.user.id;
+            }
+
+            const data = new this.model(projectData);
+            const savedData = await data.save();
+
+            Logger.info(
+                'Project created with images',
+                {
+                    id: savedData._id,
+                    slug: savedData.slug,
+                    imageCount: savedData.images.length
+                }
+            )
+
+            return this.sendSuccess(
+                res,
+                savedData,
+                'Project created with images successfully',
+                201
+            );
+        } catch (error: any) {
+            Logger.error('Error creating project with images:', error);
+
+            //Cleanup uploaded images if project creation fails
+            if (req.files && (req.files as any).images) {
+                const files = (req.files as any).images as Express.Multer.File[];
+
+                Logger.warn('Project creation failed. Cleaning up uploaded images.');
+            }
+
+            if (error.name === 'ValidationError') {
+                const errors = Object.values(error.errors).map((err: any) => err.message);
+                return this.sendError(
+                    res,
+                    'Validation failed',
+                    400,
+                    errors
+                )
+            }
+
+            if (error.code === 11000) {
+                return this.sendError(
+                    res,
+                    'Project with this slug already esists',
+                    400
+                )
+            }
+
+            return this.sendError(
+                res,
+                'Failed to create project',
+                500
+            );
+        }
+    }
+
+
+    //Update project images
+    public updateImages = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const { id } = req.params;
+
+
+            //Find existing project 
+            const project = await this.model.findById(id);
+            if (!project) {
+                return this.sendError(
+                    res,
+                    'Project not found',
+                    404
+                )
+            }
+
+            //Handle new image uploads
+            if (req.files && (req.files as any).images) {
+                const files = (req.files as any).images as Express.Multer.File[];
+
+
+
+                const uploadedImages = await cloudinaryService.uploadMultipleImages(files, 'projects');
+
+
+                const newImages = uploadedImages.map(img => ({
+                    src: img.src,
+                    public_id: img.public_id,
+                    alt: img.alt ?? ''
+                }));
+
+
+                //Add new images to existing ones 
+                project.images = [...project.images, ...newImages];
+            }
+
+
+            //Handle image deletion if specified
+            if (req.body.imagesToDelete) {
+                const imagesToDetele = JSON.parse(req.body.imagesToDelete);
+                project.images = project.images.filter(img => !imagesToDetele.includes(img.public_id));
+            }
+
+            //Update updatedBy if user is authenticated
+            if (req.user) {
+                project.updatedBy = req.user.id;
+            }
+
+
+            const updatedProject = await project.save();
+
+            Logger.info('Project imgaes updated', {
+                id: updatedProject._id,
+                newImageCount: updatedProject.images.length
+            })
+            return this.sendSuccess(
+                res,
+                updatedProject,
+                'Project images updated successfully',
+                200
+            )
+        } catch (error: any) {
+            Logger.error('Error updating project images:', error);
+            return this.sendError(
+                res,
+                'Failed to update project images',
+                500
+            )
+        }
+    }
 
     //Override create to handle slug generation and user tracking 
     public create = async (req: Request, res: Response): Promise<Response> => {

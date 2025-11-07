@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 import { database } from './config/db';
 import userRoutes from './routes/auth.route';
 import projecsRoutes from './routes/project.route';
+import { cloudinaryService } from './config/cloudinary.config';
 
 dotenv.config();
 const app = express();
@@ -42,6 +43,9 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
     credentials: true
 }));
+
+
+cloudinaryService.configure(); 
 
 // Body parser
 app.use(express.json({
