@@ -297,6 +297,58 @@ export class ProjectController extends BaseController<IProject> {
                 500
             )
         }
+
+
+
+        // Set cover image
+    public setCoverImage = async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const { id } = req.params;
+            const { publicId } = req.body;
+
+            if (!publicId) {
+                return this.sendError(res, 'Image public ID is required', 400);
+            }
+
+            const project = await this.model.findById(id);
+            if (!project) {
+                return this.sendError(res, 'Project not found', 404);
+            }
+
+            // Reset all images to not be cover
+            project.images.forEach((img: any) => {
+                img.isCover = false;
+            });
+
+            // Set the specified image as cover
+            const coverImage = project.images.find((img: any) => img.public_id === publicId);
+            if (!coverImage) {
+                return this.sendError(res, 'Image not found in project', 404);
+            }
+
+            coverImage.isCover = true;
+
+            // Update updatedBy if user is authenticated
+            if (req.user) {
+                project.updatedBy = req.user.id;
+            }
+
+            const updatedProject = await project.save();
+
+            Logger.info('Cover image set', {
+                id,
+                coverImage: publicId
+            });
+
+            return this.sendSuccess(
+                res,
+                updatedProject,
+                'Cover image set successfully'
+            );
+        } catch (error: any) {
+            Logger.error('Error setting cover image:', error);
+            return this.sendError(res, error.message, 500);
+        }
     }
     //Override create to handle slug generation and user tracking 
     public create = async (req: Request, res: Response): Promise<Response> => {
